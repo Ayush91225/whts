@@ -1,0 +1,835 @@
+<html lang="en" class="h-full"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Docs • Timetable</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin="">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+      @media print {
+        body * {
+          visibility: hidden;
+        }
+        #timetable, #timetable * {
+          visibility: visible;
+        }
+        #timetable {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100% !important;
+        }
+        .min-w-\[700px\] {
+          min-width: auto !important;
+        }
+        .overflow-x-auto {
+          overflow: visible !important;
+        }
+      }
+    </style>
+
+    <link id="all-fonts-link-font-geist" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist">.font-geist { font-family: 'Geist', sans-serif !important; }</style><link id="all-fonts-link-font-roboto" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-roboto">.font-roboto { font-family: 'Roboto', sans-serif !important; }</style><link id="all-fonts-link-font-montserrat" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-montserrat">.font-montserrat { font-family: 'Montserrat', sans-serif !important; }</style><link id="all-fonts-link-font-poppins" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-poppins">.font-poppins { font-family: 'Poppins', sans-serif !important; }</style><link id="all-fonts-link-font-playfair" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;900&amp;display=swap"><style id="all-fonts-style-font-playfair">.font-playfair { font-family: 'Playfair Display', serif !important; }</style><link id="all-fonts-link-font-instrument-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:wght@400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-instrument-serif">.font-instrument-serif { font-family: 'Instrument Serif', serif !important; }</style><link id="all-fonts-link-font-merriweather" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&amp;display=swap"><style id="all-fonts-style-font-merriweather">.font-merriweather { font-family: 'Merriweather', serif !important; }</style><link id="all-fonts-link-font-bricolage" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-bricolage">.font-bricolage { font-family: 'Bricolage Grotesque', sans-serif !important; }</style><link id="all-fonts-link-font-jakarta" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-jakarta">.font-jakarta { font-family: 'Plus Jakarta Sans', sans-serif !important; }</style><link id="all-fonts-link-font-manrope" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-manrope">.font-manrope { font-family: 'Manrope', sans-serif !important; }</style><link id="all-fonts-link-font-space-grotesk" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-space-grotesk">.font-space-grotesk { font-family: 'Space Grotesk', sans-serif !important; }</style><link id="all-fonts-link-font-work-sans" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-work-sans">.font-work-sans { font-family: 'Work Sans', sans-serif !important; }</style><link id="all-fonts-link-font-pt-serif" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-pt-serif">.font-pt-serif { font-family: 'PT Serif', serif !important; }</style><link id="all-fonts-link-font-geist-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-geist-mono">.font-geist-mono { font-family: 'Geist Mono', monospace !important; }</style><link id="all-fonts-link-font-space-mono" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap"><style id="all-fonts-style-font-space-mono">.font-space-mono { font-family: 'Space Mono', monospace !important; }</style><link id="all-fonts-link-font-quicksand" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&amp;display=swap"><style id="all-fonts-style-font-quicksand">.font-quicksand { font-family: 'Quicksand', sans-serif !important; }</style><link id="all-fonts-link-font-nunito" rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&amp;display=swap"><style id="all-fonts-style-font-nunito">.font-nunito { font-family: 'Nunito', sans-serif !important; }</style></head>
+
+  <body class="h-full bg-zinc-900 text-zinc-100 antialiased" style="font-family: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;">
+    <div class="min-h-screen">
+      <div class="h-screen flex">
+        <div class="relative flex overflow-hidden bg-zinc-900 shadow-sm w-full h-full">
+          <!-- Sidebar -->
+          <aside class="shrink-0 supports-[backdrop-filter]:bg-zinc-950/30 bg-zinc-950/40 w-64 border-stone-800 border-r backdrop-blur h-full" id="sidebar">
+
+            <div class="px-3 pb-3">
+              <button id="collapseBtn" class="group w-full items-center gap-2 rounded-md border border-stone-800 bg-zinc-900/60 px-2.5 py-2 text-left text-xs text-zinc-300 hover:bg-zinc-800/50" aria-label="Toggle sidebar width">
+                <svg data-lucide="sidebar" class="size-4 text-zinc-300"></svg>
+
+              </button>
+            </div>
+
+            <nav class="pr-2 pb-6 pl-2 space-y-1">
+              <button class="nav-btn flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800/60 hover:text-zinc-100" data-tab="overview">
+                <svg data-lucide="book-open" class="size-4"></svg>
+                <span class="truncate">Overview</span>
+              </button>
+              <button class="nav-btn flex w-full items-center gap-3 rounded-md bg-zinc-800/60 px-3 py-2 text-sm text-zinc-100" data-tab="timetable">
+                <svg data-lucide="calendar-days" class="size-4"></svg>
+                <span class="truncate">Timetable</span>
+              </button>
+              <button class="nav-btn flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800/60 hover:text-zinc-100" data-tab="subjects">
+                <svg data-lucide="layers" class="size-4"></svg>
+                <span class="truncate">Subjects</span>
+              </button>
+              <button class="nav-btn flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800/60 hover:text-zinc-100" data-tab="teachers">
+                <svg data-lucide="users" class="size-4"></svg>
+                <span class="truncate">Teachers</span>
+              </button>
+              <button class="nav-btn flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800/60 hover:text-zinc-100" data-tab="rooms">
+                <svg data-lucide="map-pin" class="size-4"></svg>
+                <span class="truncate">Rooms</span>
+              </button>
+              <button class="nav-btn flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm text-zinc-300 hover:bg-zinc-800/60 hover:text-zinc-100" data-tab="changelog">
+                <svg data-lucide="history" class="size-4"></svg>
+                <span class="truncate">Changelog</span>
+              </button>
+            </nav>
+
+
+          </aside>
+
+          <!-- Mobile overlay -->
+          <div id="overlay" class="pointer-events-none fixed inset-0 z-10 bg-black/50 opacity-0 transition-opacity duration-200"></div>
+
+          <!-- Main -->
+          <main class="flex-1 flex flex-col h-full">
+            <!-- Top bar -->
+            <div class="sticky top-0 z-10 flex items-center gap-3 border-b border-stone-800 bg-zinc-950/50 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-zinc-950/30">
+              <button id="mobileSidebarBtn" class="rounded-md border border-stone-800 p-2 text-zinc-300 hover:bg-zinc-800/60 md:hidden" aria-label="Open sidebar">
+                <svg data-lucide="panel-left" class="size-4"></svg>
+              </button>
+              <h1 class="mr-auto text-[22px] font-semibold tracking-tight text-zinc-100">
+                Rai University — B.Tech 3 CSE/IT Div A
+              </h1>
+
+              <div class="relative min-w-0 flex-1 max-w-md">
+                <svg data-lucide="search" class="pointer-events-none absolute left-3 top-2.5 size-4 text-zinc-400"></svg>
+                <input id="search" placeholder="Search subjects, teachers, or rooms..." class="w-full rounded-md border border-stone-800 bg-zinc-900/70 px-9 py-2 text-sm text-zinc-100 placeholder-zinc-500 outline-none focus:ring-2 focus:ring-blue-500/30">
+              </div>
+
+              <button id="printBtn" class="flex items-center gap-2 rounded-md border border-stone-800 bg-zinc-900/60 px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-800/60">
+                <svg data-lucide="printer" class="size-4"></svg>
+                Print
+              </button>
+            </div>
+
+            <!-- Content -->
+            <section class="p-4 sm:p-6 flex-1 overflow-y-auto">
+              <!-- Overview Tab -->
+              <div id="tab-overview" class="tab-content hidden">
+                <div class="mb-6">
+                  <h2 class="text-xl font-semibold tracking-tight">Overview</h2>
+                  <p class="text-sm text-zinc-400">Welcome to the Rai University timetable system.</p>
+                </div>
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <h3 class="mb-2 text-lg font-semibold">Quick Stats</h3>
+                    <ul class="space-y-2 text-sm text-zinc-300">
+                      <li>• 9 Subjects</li>
+                      <li>• 7 Teachers</li>
+                      <li>• 2 Classrooms</li>
+                      <li>• 5 Days Schedule</li>
+                    </ul>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <h3 class="mb-2 text-lg font-semibold">Schedule Info</h3>
+                    <ul class="space-y-2 text-sm text-zinc-300">
+                      <li>• Term: July–Dec 2025</li>
+                      <li>• Class: B.Tech 3 CSE/IT Div A</li>
+                      <li>• Timing: 9:15 AM - 3:50 PM</li>
+                      <li>• Lunch: 12:35 - 1:20 PM</li>
+                    </ul>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <h3 class="mb-2 text-lg font-semibold">Features</h3>
+                    <ul class="space-y-2 text-sm text-zinc-300">
+                      <li>• Search functionality</li>
+                      <li>• Day-wise filtering</li>
+                      <li>• Print support</li>
+                      <li>• Mobile responsive</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Timetable Tab -->
+              <div id="tab-timetable" class="tab-content">
+                <div class="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <h2 class="text-xl font-semibold tracking-tight">Term: July–Dec 2025</h2>
+                    <p class="text-sm text-zinc-400">Timetable overview with quick search and day focus.</p>
+                  </div>
+
+                  <!-- Day focus -->
+                  <div class="flex flex-wrap gap-1 sm:inline-flex sm:overflow-hidden sm:rounded-md sm:border sm:border-stone-800">
+                    <button data-day="all" class="day-btn px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-800/60 rounded sm:rounded-none">All</button>
+                    <button data-day="1" class="day-btn sm:border-l border-stone-800 px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-800/60 rounded sm:rounded-none">Mon</button>
+                    <button data-day="2" class="day-btn sm:border-l border-stone-800 px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-800/60 rounded sm:rounded-none">Tue</button>
+                    <button data-day="3" class="day-btn sm:border-l border-stone-800 px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-800/60 rounded sm:rounded-none">Wed</button>
+                    <button data-day="4" class="day-btn sm:border-l border-stone-800 px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-800/60 rounded sm:rounded-none">Thu</button>
+                    <button data-day="5" class="day-btn sm:border-l border-stone-800 px-3 py-2 text-xs text-zinc-300 hover:bg-zinc-800/60 rounded sm:rounded-none">Fri</button>
+                  </div>
+                </div>
+
+                <!-- Timetable -->
+                <div class="overflow-x-auto -mx-4 sm:mx-0">
+                  <div class="min-w-[700px] rounded-lg border border-stone-800 bg-zinc-950/30 p-2 shadow-sm mx-4 sm:mx-0">
+                    <table id="timetable" class="w-full border-collapse text-sm">
+                    <thead>
+                      <tr class="bg-zinc-900/70">
+                        <th class="w-40 border border-stone-800 px-3 py-2 text-left font-medium text-zinc-300">Time</th>
+                        <th class="border border-stone-800 px-3 py-2 text-left font-medium text-zinc-300">Mon</th>
+                        <th class="border border-stone-800 px-3 py-2 text-left font-medium text-zinc-300">Tue</th>
+                        <th class="border border-stone-800 px-3 py-2 text-left font-medium text-zinc-300">Wed</th>
+                        <th class="border border-stone-800 px-3 py-2 text-left font-medium text-zinc-300">Thu</th>
+                        <th class="border border-stone-800 px-3 py-2 text-left font-medium text-zinc-300">Fri</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="border border-stone-800 px-3 py-2 text-zinc-400">9:15–10:05</td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">LIB</div>
+                          <div class="text-xs text-zinc-400">Library</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">CJ</div>
+                          <div class="text-xs text-zinc-400">AC</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">DaFSUC</div>
+                          <div class="text-xs text-zinc-400">Group 1</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">DBMS</div>
+                          <div class="text-xs text-zinc-400">Group 1</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">FSD</div>
+                          <div class="text-xs text-zinc-400">Group 1</div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="border border-stone-800 px-3 py-2 text-zinc-400">10:05–10:55</td>
+                        <td class="session border border-stone-800 px-3 py-2 text-zinc-500">—</td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">FSD</div>
+                          <div class="text-xs text-zinc-400">SPA</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">ACCD</div>
+                          <div class="text-xs text-zinc-400"></div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">ACCD</div>
+                          <div class="text-xs text-zinc-400"></div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">SPA</div>
+                          <div class="text-xs text-zinc-400">CL‑3</div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="border border-stone-800 px-3 py-2 text-zinc-400">10:55–11:45</td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">Academic Writing</div>
+                          <div class="text-xs text-zinc-400"></div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">DaFSUC</div>
+                          <div class="text-xs text-zinc-400">AP</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">DaFSUC</div>
+                          <div class="text-xs text-zinc-400"></div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">Club Activities</div>
+                          <div class="text-xs text-zinc-400"></div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">DaFSUC</div>
+                          <div class="text-xs text-zinc-400"></div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="border border-stone-800 px-3 py-2 text-zinc-400">11:45–12:35</td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">DBMS</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">DBMS</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">A&amp;AS</div>
+                          <div class="text-xs text-zinc-400">RP</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">FSD</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">ACCD</div>
+                        </td>
+                      </tr>
+
+                      <tr class="bg-zinc-900/50">
+                        <td class="border border-stone-800 px-3 py-2 text-zinc-400">12:35–1:20</td>
+                        <td class="border border-stone-800 px-3 py-2 text-center text-zinc-300" colspan="5">Lunch Break</td>
+                      </tr>
+
+                      <tr>
+                        <td class="border border-stone-800 px-3 py-2 text-zinc-400">1:20–2:10</td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">SPORTS</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">Club Activities</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">LIB</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">A&amp;AS</div>
+                          <div class="text-xs text-zinc-400">RP</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2 text-zinc-500">—</td>
+                      </tr>
+
+                      <tr>
+                        <td class="border border-stone-800 px-3 py-2 text-zinc-400">2:10–3:00</td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">A&amp;AS</div>
+                          <div class="text-xs text-zinc-400">RP</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">Academic Writing</div>
+                          <div class="text-xs text-zinc-400">AP</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">CJ</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">DBMS</div>
+                          <div class="text-xs text-zinc-400">ACCD</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">FSD</div>
+                        </td>
+                      </tr>
+
+                      <tr>
+                        <td class="border border-stone-800 px-3 py-2 text-zinc-400">3:00–3:50</td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">LIB</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">CJ</div>
+                          <div class="text-xs text-zinc-400">AC</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">AC</div>
+                        </td>
+                        <td class="session border border-stone-800 px-3 py-2 text-zinc-500">—</td>
+                        <td class="session border border-stone-800 px-3 py-2">
+                          <div class="font-medium">CJ</div>
+                          <div class="text-xs text-zinc-400">AC</div>
+                        </td>
+                      </tr>
+                    </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subjects Tab -->
+              <div id="tab-subjects" class="tab-content hidden">
+                <div class="mb-6">
+                  <h2 class="text-xl font-semibold tracking-tight">Subjects</h2>
+                  <p class="text-sm text-zinc-400">Complete list of subjects and their abbreviations.</p>
+                </div>
+                <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                  <ul class="grid grid-cols-1 gap-3 text-sm text-zinc-300 sm:grid-cols-2 lg:grid-cols-3">
+                    <li class="flex items-center gap-3 p-2 rounded border border-stone-800/50">
+                      <span class="font-medium text-zinc-100 bg-blue-500/20 px-2 py-1 rounded text-xs">A&AS</span>
+                      <span>Aptitude, Analytical Skills</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-2 rounded border border-stone-800/50">
+                      <span class="font-medium text-zinc-100 bg-green-500/20 px-2 py-1 rounded text-xs">Academic Writing</span>
+                      <span>Academic Writing</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-2 rounded border border-stone-800/50">
+                      <span class="font-medium text-zinc-100 bg-purple-500/20 px-2 py-1 rounded text-xs">CJ</span>
+                      <span>Core Java</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-2 rounded border border-stone-800/50">
+                      <span class="font-medium text-zinc-100 bg-yellow-500/20 px-2 py-1 rounded text-xs">Club Activities</span>
+                      <span>Club Activities</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-2 rounded border border-stone-800/50">
+                      <span class="font-medium text-zinc-100 bg-red-500/20 px-2 py-1 rounded text-xs">DBMS</span>
+                      <span>Database Management Systems</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-2 rounded border border-stone-800/50">
+                      <span class="font-medium text-zinc-100 bg-indigo-500/20 px-2 py-1 rounded text-xs">DaFSUC</span>
+                      <span>Data & File Structure Using C/C++</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-2 rounded border border-stone-800/50">
+                      <span class="font-medium text-zinc-100 bg-pink-500/20 px-2 py-1 rounded text-xs">FSD</span>
+                      <span>Full‑Stack Development (Next.js)</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-2 rounded border border-stone-800/50">
+                      <span class="font-medium text-zinc-100 bg-teal-500/20 px-2 py-1 rounded text-xs">LIB</span>
+                      <span>Library</span>
+                    </li>
+                    <li class="flex items-center gap-3 p-2 rounded border border-stone-800/50">
+                      <span class="font-medium text-zinc-100 bg-orange-500/20 px-2 py-1 rounded text-xs">SPORTS</span>
+                      <span>Sports</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <!-- Teachers Tab -->
+              <div id="tab-teachers" class="tab-content hidden">
+                <div class="mb-6">
+                  <h2 class="text-xl font-semibold tracking-tight">Teachers</h2>
+                  <p class="text-sm text-zinc-400">Faculty members and their contact information.</p>
+                </div>
+                <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center">
+                        <span class="text-sm font-medium">AC</span>
+                      </div>
+                      <div>
+                        <h3 class="font-medium text-zinc-100">Arpit Chopra</h3>
+                        <p class="text-xs text-zinc-400">Core Java</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                        <span class="text-sm font-medium">ACCD</span>
+                      </div>
+                      <div>
+                        <h3 class="font-medium text-zinc-100">Arjit Chongder</h3>
+                        <p class="text-xs text-zinc-400">Database Systems</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                        <span class="text-sm font-medium">AP</span>
+                      </div>
+                      <div>
+                        <h3 class="font-medium text-zinc-100">Aditi Panda</h3>
+                        <p class="text-xs text-zinc-400">Academic Writing</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                        <span class="text-sm font-medium">DHP</span>
+                      </div>
+                      <div>
+                        <h3 class="font-medium text-zinc-100">Dr. Hardik Patel</h3>
+                        <p class="text-xs text-zinc-400">Department Head</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
+                        <span class="text-sm font-medium">MP</span>
+                      </div>
+                      <div>
+                        <h3 class="font-medium text-zinc-100">Mansi Prajapati</h3>
+                        <p class="text-xs text-zinc-400">Assistant Professor</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 rounded-full bg-indigo-500/20 flex items-center justify-center">
+                        <span class="text-sm font-medium">RP</span>
+                      </div>
+                      <div>
+                        <h3 class="font-medium text-zinc-100">Rahul Parmar</h3>
+                        <p class="text-xs text-zinc-400">Aptitude & Analytics</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center">
+                        <span class="text-sm font-medium">SPA</span>
+                      </div>
+                      <div>
+                        <h3 class="font-medium text-zinc-100">Sthitpragya P. Acharya</h3>
+                        <p class="text-xs text-zinc-400">Full-Stack Development</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Rooms Tab -->
+              <div id="tab-rooms" class="tab-content hidden">
+                <div class="mb-6">
+                  <h2 class="text-xl font-semibold tracking-tight">Classrooms</h2>
+                  <p class="text-sm text-zinc-400">Available classrooms and their facilities.</p>
+                </div>
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                      <div class="w-12 h-12 rounded-lg bg-blue-500/20 flex items-center justify-center">
+                        <svg data-lucide="monitor" class="size-6 text-blue-400"></svg>
+                      </div>
+                      <div>
+                        <h3 class="text-lg font-semibold text-zinc-100">CL‑1</h3>
+                        <p class="text-sm text-zinc-400">Tech Sphere Programming Lab</p>
+                      </div>
+                    </div>
+                    <ul class="space-y-2 text-sm text-zinc-300">
+                      <li>• 30 Computer Systems</li>
+                      <li>• High-speed Internet</li>
+                      <li>• Projector & Smart Board</li>
+                      <li>• Air Conditioning</li>
+                    </ul>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-6">
+                    <div class="flex items-center gap-3 mb-4">
+                      <div class="w-12 h-12 rounded-lg bg-green-500/20 flex items-center justify-center">
+                        <svg data-lucide="code" class="size-6 text-green-400"></svg>
+                      </div>
+                      <div>
+                        <h3 class="text-lg font-semibold text-zinc-100">CL‑3</h3>
+                        <p class="text-sm text-zinc-400">Web Development Lab</p>
+                      </div>
+                    </div>
+                    <ul class="space-y-2 text-sm text-zinc-300">
+                      <li>• 25 Development Workstations</li>
+                      <li>• Multiple Monitors Setup</li>
+                      <li>• Latest Software Tools</li>
+                      <li>• Collaborative Workspace</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mt-6 rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                  <div class="flex items-center gap-2 text-sm text-zinc-400">
+                    <svg data-lucide="info" class="size-4"></svg>
+                    <span>Room codes in timetable cells indicate the specific classroom for that session.</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Changelog Tab -->
+              <div id="tab-changelog" class="tab-content hidden">
+                <div class="mb-6">
+                  <h2 class="text-xl font-semibold tracking-tight">Changelog</h2>
+                  <p class="text-sm text-zinc-400">Recent updates and improvements to the timetable system.</p>
+                </div>
+                <div class="space-y-4">
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                      <span class="text-sm font-medium text-zinc-100">Version 2.0 - Enhanced Features</span>
+                      <span class="text-xs text-zinc-400 ml-auto">Latest</span>
+                    </div>
+                    <ul class="list-disc pl-6 text-sm text-zinc-300 space-y-1">
+                      <li>Added responsive design for mobile devices</li>
+                      <li>Implemented tab-based navigation system</li>
+                      <li>Enhanced search functionality</li>
+                      <li>Improved teacher and room information display</li>
+                      <li>Added overview dashboard</li>
+                    </ul>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-2 h-2 rounded-full bg-blue-500"></div>
+                      <span class="text-sm font-medium text-zinc-100">Version 1.1 - Search & Filter</span>
+                      <span class="text-xs text-zinc-400 ml-auto">30-08-2025</span>
+                    </div>
+                    <ul class="list-disc pl-6 text-sm text-zinc-300 space-y-1">
+                      <li>Added search and day focus functionality</li>
+                      <li>Improved visual highlighting</li>
+                      <li>Enhanced mobile sidebar</li>
+                    </ul>
+                  </div>
+                  <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-2 h-2 rounded-full bg-zinc-500"></div>
+                      <span class="text-sm font-medium text-zinc-100">Version 1.0 - Initial Release</span>
+                      <span class="text-xs text-zinc-400 ml-auto">30-08-2025</span>
+                    </div>
+                    <ul class="list-disc pl-6 text-sm text-zinc-300 space-y-1">
+                      <li>Initial import from timetable image</li>
+                      <li>Basic table structure and styling</li>
+                      <li>Print functionality</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Legacy sections (hidden by default) -->
+              <div id="subjects" class="hidden mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+                <div class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                  <h3 class="mb-2 text-lg font-semibold tracking-tight">Subjects</h3>
+                  <ul class="space-y-1 text-sm text-zinc-300">
+                    <li><span class="font-medium text-zinc-100">A&amp;AS</span> — Aptitude, Analytical Skills</li>
+                    <li><span class="font-medium text-zinc-100">Academic Writing</span> — Academic Writing</li>
+                    <li><span class="font-medium text-zinc-100">CJ</span> — Core Java</li>
+                    <li><span class="font-medium text-zinc-100">Club Activities</span> — Club Activities</li>
+                    <li><span class="font-medium text-zinc-100">DBMS</span> — Database Management Systems</li>
+                    <li><span class="font-medium text-zinc-100">DaFSUC</span> — Data &amp; File Structure Using C/C++</li>
+                    <li><span class="font-medium text-zinc-100">FSD</span> — Full‑Stack Development (Next.js)</li>
+                    <li><span class="font-medium text-zinc-100">LIB</span> — Library</li>
+                    <li><span class="font-medium text-zinc-100">SPORTS</span> — Sports</li>
+                  </ul>
+                </div>
+
+                <div id="teachers" class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                  <h3 class="mb-2 text-lg font-semibold tracking-tight">Teachers</h3>
+                  <ul class="grid grid-cols-1 gap-1 text-sm text-zinc-300 sm:grid-cols-2">
+                    <li><span class="font-medium text-zinc-100">AC</span> — Arpit Chopra</li>
+                    <li><span class="font-medium text-zinc-100">ACCD</span> — Arjit Chongder</li>
+                    <li><span class="font-medium text-zinc-100">AP</span> — Aditi Panda</li>
+                    <li><span class="font-medium text-zinc-100">DHP</span> — Dr. Hardik Patel</li>
+                    <li><span class="font-medium text-zinc-100">MP</span> — Mansi Prajapati</li>
+                    <li><span class="font-medium text-zinc-100">RP</span> — Rahul Parmar</li>
+                    <li><span class="font-medium text-zinc-100">SPA</span> — Sthitpragya P. Acharya</li>
+                  </ul>
+                </div>
+
+                <div id="rooms" class="rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                  <h3 class="mb-2 text-lg font-semibold tracking-tight">Classrooms</h3>
+                  <ul class="space-y-1 text-sm text-zinc-300">
+                    <li><span class="font-medium text-zinc-100">CL‑1</span> — Tech Sphere Programming Lab</li>
+                    <li><span class="font-medium text-zinc-100">CL‑3</span> — Web Development</li>
+                  </ul>
+
+                  <div class="mt-4 flex items-center gap-2 text-xs text-zinc-400">
+                    <svg data-lucide="info" class="size-4"></svg>
+                    Cells may include teacher initials or room codes.
+                  </div>
+                </div>
+              </div>
+
+              <div id="changelog" class="hidden mt-8 rounded-lg border border-stone-800 bg-zinc-950/30 p-4">
+                <h3 class="mb-2 text-lg font-semibold tracking-tight">Changelog</h3>
+                <ul class="list-disc pl-6 text-sm text-zinc-300">
+                  <li>Initial import from timetable image (30‑08‑2025).</li>
+                  <li>Added search and day focus.</li>
+                </ul>
+              </div>
+            </section>
+          </main>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Icons (consistent stroke width)
+      window.addEventListener('DOMContentLoaded', () => {
+        lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+      });
+
+      // Elements
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('overlay');
+      const collapseBtn = document.getElementById('collapseBtn');
+      const mobileSidebarBtn = document.getElementById('mobileSidebarBtn');
+      const printBtn = document.getElementById('printBtn');
+      const searchInput = document.getElementById('search');
+      const dayBtns = document.querySelectorAll('.day-btn');
+      const navBtns = document.querySelectorAll('.nav-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      // Mobile sidebar constants
+      const mobileOpenClass = 'translate-x-0';
+      const mobileClosedClass = '-translate-x-full';
+      
+      function ensureMobileBase() {
+        sidebar.classList.add('fixed', 'inset-y-0', 'left-0', 'z-20', 'transition', 'duration-200', 'ease-out', 'bg-zinc-950/95', 'backdrop-blur', 'shadow-xl');
+      }
+      
+      function setOverlay(open) {
+        overlay.classList.toggle('opacity-100', open);
+        overlay.classList.toggle('pointer-events-auto', open);
+      }
+      
+      function setMobileSidebar(open) {
+        ensureMobileBase();
+        sidebar.classList.toggle(mobileOpenClass, open);
+        sidebar.classList.toggle(mobileClosedClass, !open);
+        setOverlay(open);
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+
+      // Tab navigation
+      let currentTab = 'timetable';
+      
+      function showTab(tabName) {
+        // Hide all tabs
+        tabContents.forEach(tab => tab.classList.add('hidden'));
+        
+        // Show selected tab
+        const targetTab = document.getElementById(`tab-${tabName}`);
+        if (targetTab) {
+          targetTab.classList.remove('hidden');
+        }
+        
+        // Update nav button states
+        navBtns.forEach(btn => {
+          btn.classList.remove('bg-zinc-800/60', 'text-zinc-100');
+          btn.classList.add('text-zinc-300');
+        });
+        
+        const activeBtn = Array.from(navBtns).find(btn => btn.getAttribute('data-tab') === tabName);
+        if (activeBtn) {
+          activeBtn.classList.add('bg-zinc-800/60', 'text-zinc-100');
+          activeBtn.classList.remove('text-zinc-300');
+        }
+        
+        currentTab = tabName;
+        
+        // Close mobile sidebar after navigation
+        if (window.innerWidth < 768) {
+          setMobileSidebar(false);
+        }
+      }
+      
+      // Nav button click handlers
+      navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const tabName = btn.getAttribute('data-tab');
+          showTab(tabName);
+        });
+      });
+      
+      // Initialize with timetable tab
+      showTab('timetable');
+
+      // Sidebar collapse (desktop)
+      let collapsed = false;
+      collapseBtn?.addEventListener('click', () => {
+        collapsed = !collapsed;
+        if (collapsed) {
+          sidebar.classList.add('w-[72px]');
+          sidebar.querySelectorAll('nav a span').forEach((el) => (el.style.display = 'none'));
+          collapseBtn.querySelector('span').style.display = 'none';
+        } else {
+          sidebar.classList.remove('w-[72px]');
+          sidebar.querySelectorAll('nav a span').forEach((el) => (el.style.display = ''));
+          collapseBtn.querySelector('span').style.display = '';
+        }
+      });
+
+      // Mobile sidebar initialization
+      // Initialize state based on viewport
+      const mq = window.matchMedia('(max-width: 767px)');
+      function applyMQ(e) {
+        if (e.matches) {
+          setMobileSidebar(false);
+        } else {
+          // Desktop: remove mobile transforms/overlay
+          sidebar.classList.remove('fixed', 'inset-y-0', 'left-0', 'z-20', mobileOpenClass, mobileClosedClass, 'transition', 'duration-200', 'ease-out', 'bg-zinc-950/95', 'shadow-xl');
+          setOverlay(false);
+          document.body.style.overflow = '';
+        }
+      }
+      applyMQ(mq);
+      mq.addEventListener('change', applyMQ);
+
+      mobileSidebarBtn?.addEventListener('click', () => {
+        const open = !sidebar.classList.contains(mobileOpenClass);
+        setMobileSidebar(open);
+      });
+      overlay?.addEventListener('click', () => setMobileSidebar(false));
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && sidebar.classList.contains(mobileOpenClass)) setMobileSidebar(false);
+      });
+
+      // Print
+      printBtn?.addEventListener('click', () => window.print());
+
+      // Filtering (search + day focus unified)
+      const table = document.getElementById('timetable');
+      const rows = Array.from(table.querySelectorAll('tbody tr'));
+      const allCells = Array.from(table.querySelectorAll('.session'));
+
+      let selectedDay = 'all';
+      let searchQuery = '';
+
+      function cellIndexWithinRow(cell) {
+        // Return 1..5 for Mon..Fri, or -1 if not a day cell (e.g., lunch colspan)
+        const row = cell.parentElement;
+        const cells = Array.from(row.children);
+        const idx = cells.indexOf(cell);
+        return idx; // 1..5 expected for normal rows
+      }
+
+      function updateFilters() {
+        const dayIndex = selectedDay === 'all' ? null : parseInt(selectedDay, 10); // 1..5
+        const hasQuery = searchQuery.length > 0;
+
+        // Clear previous highlights
+        allCells.forEach((c) => {
+          c.classList.remove('ring-1', 'ring-blue-500/40', 'bg-blue-500/5', 'bg-zinc-900/30');
+        });
+
+        // Apply per-cell rules
+        allCells.forEach((cell) => {
+          const idx = cellIndexWithinRow(cell); // 1..5 typical
+          const text = cell.textContent.toLowerCase();
+          const matches = hasQuery ? text.includes(searchQuery) : true;
+
+          // Base styles
+          let opacity = 1;
+
+          // Day focus dimming
+          if (dayIndex !== null && idx !== dayIndex) {
+            opacity = 0.35;
+          } else if (dayIndex !== null && idx === dayIndex) {
+            cell.classList.add('bg-zinc-900/30');
+          }
+
+          // Search dimming/highlight
+          if (hasQuery && !matches) {
+            opacity = 0.35;
+          }
+          if (hasQuery && matches) {
+            cell.classList.add('ring-1', 'ring-blue-500/40', 'bg-blue-500/5');
+          }
+
+          cell.style.opacity = String(opacity);
+        });
+
+        // Update day button state
+        dayBtns.forEach((b) => b.classList.remove('bg-zinc-800/60', 'text-zinc-100'));
+        const activeBtn = Array.from(dayBtns).find((b) => b.getAttribute('data-day') === selectedDay);
+        activeBtn?.classList.add('bg-zinc-800/60', 'text-zinc-100');
+      }
+
+      // Init default active "All"
+      updateFilters();
+
+      // Day buttons
+      dayBtns.forEach((btn) =>
+        btn.addEventListener('click', () => {
+          selectedDay = btn.getAttribute('data-day') || 'all';
+          updateFilters();
+        })
+      );
+
+      // Search input
+      function setSearch(value) {
+        searchQuery = value.trim().toLowerCase();
+        updateFilters();
+      }
+      searchInput?.addEventListener('input', (e) => setSearch(e.target.value));
+      searchInput?.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          searchInput.value = '';
+          setSearch('');
+        }
+      });
+    </script>
+  
+</body></html>

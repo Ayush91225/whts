@@ -1,0 +1,2237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Bulk Sender</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        .sidebar-item {
+            transition: all 0.2s ease;
+        }
+        
+        .sidebar-item:hover {
+            background: rgba(99, 102, 241, 0.1);
+            color: rgb(199, 210, 254);
+        }
+        
+        .sidebar-item.active {
+            background: rgba(99, 102, 241, 0.15);
+            color: rgb(199, 210, 254);
+            border-right: 3px solid rgb(99, 102, 241);
+        }
+        
+        .conversation-item {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .conversation-item:hover {
+            background: rgba(99, 102, 241, 0.05);
+        }
+        
+        .conversation-item.active {
+            background: rgba(99, 102, 241, 0.1);
+            border-left-color: rgb(99, 102, 241);
+        }
+        
+        .status-indicator {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        
+        .modal-backdrop {
+            backdrop-filter: blur(8px);
+            background: rgba(0, 0, 0, 0.4);
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: rgb(39, 39, 42);
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background: rgb(82, 82, 91);
+            border-radius: 3px;
+        }
+        
+        .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+            background: rgb(113, 113, 122);
+        }
+        
+        .view-content {
+            display: none;
+        }
+        
+        .view-content.active {
+            display: block;
+        }
+        
+        .middle-content {
+            display: none;
+        }
+        
+        .middle-content.active {
+            display: block;
+        }
+        
+        .tab-btn {
+            transition: all 0.2s ease;
+        }
+        
+        .tab-btn:hover {
+            background: rgb(39, 39, 42);
+            color: rgb(244, 244, 245);
+        }
+        
+        .tab-btn.active {
+            background: rgb(39, 39, 42);
+            color: rgb(244, 244, 245);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-inter">
+    <!-- Main Container -->
+    <div class="flex h-screen overflow-hidden">
+        <!-- Left Sidebar -->
+        <div class="w-64 bg-zinc-900/50 border-r border-white/10 flex flex-col backdrop-blur-md">
+            <!-- Logo/Brand -->
+            <div class="p-6 border-b border-white/10">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-indigo-500 rounded-lg flex items-center justify-center">
+                        <i data-lucide="message-circle" class="w-5 h-5 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-semibold text-zinc-100">WhatsApp Hub</h1>
+                        <p class="text-xs text-zinc-400">Business Platform</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <nav class="flex-1 p-4">
+                <div class="space-y-1">
+                    <div class="sidebar-item active px-3 py-2.5 rounded-lg cursor-pointer text-zinc-300" onclick="setActiveView('campaigns')">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                            <span class="font-medium">Campaigns</span>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-item px-3 py-2.5 rounded-lg cursor-pointer text-zinc-400" onclick="setActiveView('contacts')">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                            <span class="font-medium">Contacts</span>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-item px-3 py-2.5 rounded-lg cursor-pointer text-zinc-400" onclick="setActiveView('accounts')">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="smartphone" class="w-5 h-5"></i>
+                            <span class="font-medium">Accounts</span>
+                            <span id="accountsCount" class="ml-auto text-xs bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full">0</span>
+                        </div>
+                    </div>
+                    
+                    <div class="sidebar-item px-3 py-2.5 rounded-lg cursor-pointer text-zinc-400" onclick="setActiveView('reports')">
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+                            <span class="font-medium">Reports</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-8">
+                    <h3 class="text-xs font-medium text-zinc-500 uppercase tracking-wider mb-3">Settings</h3>
+                    <div class="space-y-1">
+                        <div class="sidebar-item px-3 py-2.5 rounded-lg cursor-pointer text-zinc-400">
+                            <div class="flex items-center space-x-3">
+                                <i data-lucide="settings" class="w-5 h-5"></i>
+                                <span class="font-medium">Preferences</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            
+            <!-- Stats Summary -->
+            <div class="p-4 border-t border-white/10">
+                <div class="bg-zinc-900/60 rounded-lg p-3 ring-1 ring-white/10">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-zinc-400">Messages Sent</span>
+                        <span id="totalSentSidebar" class="font-semibold text-zinc-100">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Middle Section - Lists -->
+        <div class="w-80 bg-zinc-900/40 border-r border-white/10 flex flex-col backdrop-blur-md">
+            <!-- Header -->
+            <div class="p-6 border-b border-white/10">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-zinc-100" id="middlePanelTitle">All Campaigns</h2>
+                    <button onclick="createNewCampaign()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium transition-colors">
+                        New Campaign
+                    </button>
+                </div>
+                <div class="flex items-center space-x-4 mt-4">
+                    <div class="tab-btn active flex items-center space-x-2 bg-zinc-900/70 text-zinc-200 px-3 py-1.5 rounded-lg text-sm font-medium cursor-pointer">
+                        <span>All</span>
+                    </div>
+                    <div class="tab-btn flex items-center space-x-2 text-zinc-400 px-3 py-1.5 rounded-lg text-sm cursor-pointer">
+                        <span>Active</span>
+                    </div>
+                    <div class="tab-btn flex items-center space-x-2 text-zinc-400 px-3 py-1.5 rounded-lg text-sm cursor-pointer">
+                        <span>Completed</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Middle Panel Content -->
+            <div class="flex-1 overflow-y-auto scrollbar-thin">
+                <!-- Campaigns List -->
+                <div id="campaignsList" class="middle-content active">
+                    <div class="p-6 text-center text-zinc-400">
+                        <i data-lucide="message-square-plus" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                        <p class="font-medium mb-1 text-zinc-300">No campaigns yet</p>
+                        <p class="text-sm">Create your first campaign to get started</p>
+                    </div>
+                </div>
+                
+                <!-- Contacts List -->
+                <div id="contactsList" class="middle-content p-6">
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-medium text-zinc-200">Saved Contacts</h3>
+                            <button onclick="uploadContactList()" class="text-indigo-400 hover:text-indigo-300">
+                                <i data-lucide="upload" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div id="contactsContent">
+                            <div class="text-center py-8 text-zinc-400">
+                                <i data-lucide="users" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                                <p class="font-medium mb-1 text-zinc-300">No contacts saved</p>
+                                <p class="text-sm">Upload CSV files to save contacts</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Accounts List -->
+                <div id="accountsList" class="middle-content">
+                    <div class="p-4">
+                        <div class="flex items-center justify-between mb-3">
+                            <h3 class="font-medium text-zinc-300">WhatsApp Accounts</h3>
+                            <button onclick="addNewSession()" class="text-indigo-400 hover:text-indigo-300">
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        <div id="sessionsList" class="space-y-2">
+                            <div class="text-center py-4 text-zinc-400">
+                                <i data-lucide="smartphone" class="w-6 h-6 mx-auto mb-2 opacity-50"></i>
+                                <p class="text-xs">No accounts connected</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reports List -->
+                <div id="reportsList" class="middle-content p-6">
+                    <div class="space-y-4">
+                        <h3 class="font-medium text-zinc-200">Campaign Reports</h3>
+                        <div id="reportsContent" class="text-center py-8 text-zinc-400">
+                            <i data-lucide="bar-chart-3" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                            <p class="font-medium mb-1 text-zinc-300">No reports available</p>
+                            <p class="text-sm">Reports will appear after sending campaigns</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col bg-zinc-950">
+            <!-- Top Bar -->
+            <div class="bg-zinc-900/50 border-b border-white/10 px-6 py-4 backdrop-blur-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-xl font-semibold text-zinc-100" id="mainTitle">Create New Campaign</h1>
+                        <p class="text-sm text-zinc-400" id="mainSubtitle">Send messages to multiple recipients</p>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <div class="text-sm text-zinc-400">
+                            <span id="totalSentDisplay">0 messages sent today</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="flex-1 overflow-y-auto scrollbar-thin">
+                <div class="p-6">
+                    <!-- Campaigns View -->
+                    <div id="campaignsView" class="view-content active max-w-4xl">
+                        <form id="campaignForm" class="space-y-8">
+                            <!-- Recipients Section -->
+                            <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <div class="flex items-center space-x-3 mb-6">
+                                    <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="users" class="w-5 h-5 text-blue-400"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-zinc-200">Recipients</h3>
+                                        <p class="text-sm text-zinc-400">Choose recipients for your campaign</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Recipient Source Selection -->
+                                <div class="mb-6">
+                                    <div class="flex space-x-4">
+                                        <label class="flex items-center space-x-2 cursor-pointer">
+                                            <input type="radio" name="recipientSource" value="saved" class="text-indigo-600" onchange="toggleRecipientSource('saved')">
+                                            <span class="text-sm font-medium text-zinc-300">Use Saved Contacts</span>
+                                        </label>
+                                        <label class="flex items-center space-x-2 cursor-pointer">
+                                            <input type="radio" name="recipientSource" value="csv" class="text-indigo-600" checked onchange="toggleRecipientSource('csv')">
+                                            <span class="text-sm font-medium text-zinc-300">Upload CSV</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Saved Contacts Selection -->
+                                <div id="savedContactsSection" class="hidden mb-6">
+                                    <div class="border border-white/10 rounded-lg p-4 max-h-60 overflow-y-auto bg-zinc-900/30">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <span class="text-sm font-medium text-zinc-300">Select Contacts</span>
+                                            <div class="flex space-x-2">
+                                                <button type="button" onclick="selectAllContacts()" class="text-xs text-indigo-400 hover:text-indigo-300">Select All</button>
+                                                <button type="button" onclick="deselectAllContacts()" class="text-xs text-zinc-400 hover:text-zinc-300">Deselect All</button>
+                                            </div>
+                                        </div>
+                                        <div id="savedContactsList" class="space-y-2">
+                                            <!-- Contacts will be loaded here -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- CSV Upload Section -->
+                                <div id="csvUploadSection" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium text-zinc-300 mb-3">CSV File</label>
+                                        <div class="relative">
+                                            <input type="file" name="csv" accept=".csv" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                            <div id="csvUpload" class="border-2 border-dashed border-white/20 rounded-lg p-8 text-center hover:border-indigo-400/50 transition-colors bg-zinc-900/30">
+                                                <i data-lucide="upload" class="w-8 h-8 mx-auto mb-3 text-zinc-400"></i>
+                                                <div class="file-upload-text text-sm font-medium text-zinc-200">Drop CSV file here or click to browse</div>
+                                                <div class="file-upload-subtext text-xs text-zinc-400 mt-1">CSV with 'number' or 'phone' column</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-sm font-medium text-zinc-300 mb-3">Media Files (Optional)</label>
+                                        <div class="relative">
+                                            <input type="file" name="media" accept="image/*,application/*,.pdf,.doc,.docx" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                                            <div id="mediaUpload" class="border-2 border-dashed border-white/20 rounded-lg p-8 text-center hover:border-indigo-400/50 transition-colors bg-zinc-900/30">
+                                                <i data-lucide="paperclip" class="w-8 h-8 mx-auto mb-3 text-zinc-400"></i>
+                                                <div class="file-upload-text text-sm font-medium text-zinc-200">Drop media files here or click to browse</div>
+                                                <div class="file-upload-subtext text-xs text-zinc-400 mt-1">Multiple images, documents supported</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Media Preview -->
+                                <div id="mediaPreview" class="hidden mt-6 space-y-3">
+                                    <!-- Media files will be shown here -->
+                                </div>
+                            </div>
+                            
+                            <!-- Recipients Preview -->
+                            <div id="recipientsSection" class="hidden bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <div class="flex items-center justify-between mb-4">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-zinc-200">Contacts Loaded</h3>
+                                            <p class="text-sm text-zinc-400"><span id="recipientCount">0</span> recipients found</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="toggleRecipients()" id="toggleBtn" class="text-sm text-indigo-400 hover:text-indigo-300 flex items-center space-x-1">
+                                        <span>Show All</span>
+                                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                <div id="recipientsList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-h-60 overflow-y-auto scrollbar-thin">
+                                    <!-- Recipients will be populated here -->
+                                </div>
+                            </div>
+                            
+                            <!-- Sender Selection -->
+                            <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <div class="flex items-center space-x-3 mb-6">
+                                    <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="smartphone" class="w-5 h-5 text-purple-400"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-zinc-200">Sender Account</h3>
+                                        <p class="text-sm text-zinc-400">Choose WhatsApp account</p>
+                                    </div>
+                                </div>
+                                
+                                <select name="sessionId" id="sessionSelect" required class="w-full px-4 py-3 bg-zinc-900/50 border border-white/20 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-zinc-200">
+                                    <option value="">Select WhatsApp account</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Campaign Settings -->
+                            <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <div class="flex items-center space-x-3 mb-6">
+                                    <div class="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="settings" class="w-5 h-5 text-orange-400"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-zinc-200">Campaign Settings</h3>
+                                        <p class="text-sm text-zinc-400">Configure your campaign</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div>
+                                        <label class="block text-sm font-medium text-zinc-300 mb-2">Campaign Name</label>
+                                        <input type="text" name="campaignName" placeholder="Enter campaign name" class="w-full px-3 py-2 bg-zinc-900/50 border border-white/20 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-zinc-200 placeholder-zinc-500">
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="flex items-center space-x-2 cursor-pointer">
+                                            <input type="checkbox" id="scheduleCheckbox" class="text-indigo-600" onchange="toggleScheduling()">
+                                            <span class="text-sm font-medium text-zinc-300">Schedule Campaign</span>
+                                        </label>
+                                        <div id="scheduleSection" class="hidden mt-3">
+                                            <input type="datetime-local" name="scheduledTime" class="w-full px-3 py-2 bg-zinc-900/50 border border-white/20 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-zinc-200">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- AI Message Generator -->
+                            <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <div class="flex items-center justify-between mb-6">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="sparkles" class="w-5 h-5 text-purple-400"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-zinc-200">AI Message Generator</h3>
+                                            <p class="text-sm text-zinc-400">Generate professional campaign messages</p>
+                                        </div>
+                                    </div>
+                                    <button type="button" onclick="toggleAIGenerator()" id="aiToggleBtn" class="text-sm text-purple-400 hover:text-purple-300">
+                                        Show AI Generator
+                                    </button>
+                                </div>
+                                
+                                <div id="aiGeneratorSection" class="hidden mb-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-zinc-300 mb-2">Language</label>
+                                            <select id="aiLanguage" class="w-full px-3 py-2 bg-zinc-900/50 border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 text-zinc-200">
+                                                <option value="English">English</option>
+                                                <option value="Hindi">Hindi</option>
+                                                <option value="Spanish">Spanish</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <label class="block text-sm font-medium text-zinc-300 mb-2">Describe what you want to communicate</label>
+                                        <textarea id="aiPrompt" rows="4" placeholder="Describe anything you want to communicate - product launch, event invitation, service announcement, personal message, business update, etc.
+
+Example: 
+- New restaurant opening with 20% discount
+- Birthday party invitation for Saturday
+- Yoga classes starting next week
+- Flash sale on electronics" class="w-full px-3 py-2 bg-zinc-900/50 border border-white/20 rounded-lg focus:ring-2 focus:ring-purple-500 resize-none text-zinc-200 placeholder-zinc-500"></textarea>
+                                    </div>
+                                    
+                                    <button type="button" onclick="generateAIMessage()" id="generateBtn" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                                        Generate Message
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Message Composer -->
+                            <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <div class="flex items-center space-x-3 mb-6">
+                                    <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="message-square" class="w-5 h-5 text-emerald-400"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-zinc-200">Message Content</h3>
+                                        <p class="text-sm text-zinc-400">Compose your message</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="border border-white/20 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-indigo-500 focus-within:border-transparent bg-zinc-900/30">
+                                    <!-- Message Toolbar -->
+                                    <div class="px-4 py-3 bg-zinc-900/50 border-b border-white/10 flex items-center space-x-2">
+                                        <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-zinc-800 rounded transition-colors" title="Bold">
+                                            <i data-lucide="bold" class="w-4 h-4 text-zinc-400"></i>
+                                        </button>
+                                        <button type="button" onclick="formatText('italic')" class="p-2 hover:bg-zinc-800 rounded transition-colors" title="Italic">
+                                            <i data-lucide="italic" class="w-4 h-4 text-zinc-400"></i>
+                                        </button>
+                                        <button type="button" onclick="formatText('strikethrough')" class="p-2 hover:bg-zinc-800 rounded transition-colors" title="Strikethrough">
+                                            <i data-lucide="strikethrough" class="w-4 h-4 text-zinc-400"></i>
+                                        </button>
+                                        <div class="w-px h-6 bg-white/10"></div>
+                                        <button type="button" onclick="insertLink()" class="p-2 hover:bg-zinc-800 rounded transition-colors" title="Add Link">
+                                            <i data-lucide="link" class="w-4 h-4 text-zinc-400"></i>
+                                        </button>
+                                    </div>
+                                    <textarea name="message" id="messageTextarea" rows="8" class="w-full px-4 py-4 border-0 focus:ring-0 resize-none text-sm bg-transparent text-zinc-200 placeholder-zinc-500" placeholder="Write your message here...
+
+You can use WhatsApp formatting:
+• *Bold text* for emphasis
+• _Italic text_ for style
+• ~Strikethrough~ for crossed text
+
+Example:
+*Special Offer!*
+Get _50% off_ on all products this weekend!
+Visit: https://yourstore.com"></textarea>
+                                </div>
+                            </div>
+                            
+                            <!-- Send Button -->
+                            <div class="flex justify-end">
+                                <button type="submit" id="sendBtn" class="px-8 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition-colors flex items-center space-x-2">
+                                    <i data-lucide="send" class="w-5 h-5"></i>
+                                    <span>Send Campaign</span>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <!-- Contacts View -->
+                    <div id="contactsView" class="view-content max-w-4xl">
+                        <div class="space-y-6">
+                            <!-- Upload Section -->
+                            <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <div class="flex items-center space-x-3 mb-6">
+                                    <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="upload" class="w-5 h-5 text-emerald-400"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-zinc-200">Upload Contacts</h3>
+                                        <p class="text-sm text-zinc-400">Add new contacts from CSV file</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="border-2 border-dashed border-white/20 rounded-lg p-8 text-center hover:border-indigo-400/50 transition-colors bg-zinc-900/30">
+                                    <i data-lucide="upload" class="w-12 h-12 mx-auto mb-4 text-zinc-400"></i>
+                                    <h4 class="text-lg font-medium text-zinc-200 mb-2">Upload Contact List</h4>
+                                    <p class="text-zinc-400 mb-4">Drop your CSV file here or click to browse</p>
+                                    <input type="file" accept=".csv" class="hidden" id="contactFileInput">
+                                    <button onclick="document.getElementById('contactFileInput').click()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                                        Choose File
+                                    </button>
+                                    <p class="text-xs text-zinc-500 mt-2">CSV should contain 'number' or 'phone' column</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Saved Contacts Section -->
+                            <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <div class="flex items-center justify-between mb-6">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="users" class="w-5 h-5 text-blue-400"></i>
+                                        </div>
+                                        <div>
+                                            <h3 class="font-semibold text-zinc-200">Saved Contacts</h3>
+                                            <p class="text-sm text-zinc-400" id="contactsCount">0 contacts saved</p>
+                                        </div>
+                                    </div>
+                                    <button onclick="refreshContacts()" class="text-zinc-400 hover:text-zinc-300 p-2">
+                                        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                                
+                                <div id="savedContactsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-h-96 overflow-y-auto">
+                                    <!-- Contacts will be loaded here -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Accounts View -->
+                    <div id="accountsView" class="view-content max-w-4xl">
+                        <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="smartphone" class="w-5 h-5 text-emerald-400"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-zinc-200">WhatsApp Accounts</h3>
+                                        <p class="text-sm text-zinc-400">Connect and manage your WhatsApp accounts</p>
+                                    </div>
+                                </div>
+                                <button onclick="addNewSession()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center space-x-2">
+                                    <i data-lucide="plus" class="w-4 h-4"></i>
+                                    <span>Add Account</span>
+                                </button>
+                            </div>
+                            
+                            <div id="accountsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Accounts will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Reports View -->
+                    <div id="reportsView" class="view-content max-w-6xl">
+                        <div class="space-y-6">
+                            <!-- Date Filter -->
+                            <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="font-semibold text-zinc-200">Filter Reports</h3>
+                                    <div class="flex items-center space-x-4">
+                                        <input type="date" id="reportDate" class="px-3 py-2 bg-zinc-900/50 border border-white/20 rounded-lg focus:ring-2 focus:ring-indigo-500 text-zinc-200">
+                                        <button onclick="filterReportsByDate()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                                            Filter
+                                        </button>
+                                        <button onclick="clearDateFilter()" class="text-zinc-400 hover:text-zinc-300 px-4 py-2">
+                                            Clear
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Stats Cards -->
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="send" class="w-5 h-5 text-emerald-400"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-zinc-400">Total Sent</p>
+                                            <p class="text-2xl font-bold text-zinc-200" id="totalSentReport">0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="users" class="w-5 h-5 text-blue-400"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-zinc-400">Campaigns</p>
+                                            <p class="text-2xl font-bold text-zinc-200" id="totalCampaigns">0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="percent" class="w-5 h-5 text-yellow-400"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-zinc-400">Success Rate</p>
+                                            <p class="text-2xl font-bold text-zinc-200" id="successRate">0%</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center">
+                                            <i data-lucide="x-circle" class="w-5 h-5 text-red-400"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-zinc-400">Failed</p>
+                                            <p class="text-2xl font-bold text-zinc-200" id="totalFailedReport">0</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Charts -->
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                    <h3 class="font-semibold text-zinc-200 mb-4">Success vs Failed Messages</h3>
+                                    <div class="relative h-64">
+                                        <canvas id="successFailChart"></canvas>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                    <h3 class="font-semibold text-zinc-200 mb-4">Campaign Performance</h3>
+                                    <div class="relative h-64">
+                                        <canvas id="campaignChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Campaign Reports List -->
+                            <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                                <h3 class="font-semibold text-zinc-200 mb-4">Campaign Reports</h3>
+                                <div id="campaignReportsList" class="space-y-3">
+                                    <div class="text-center py-8 text-zinc-400">
+                                        <i data-lucide="bar-chart-3" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+                                        <p class="text-sm">No reports available</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Progress Section -->
+                    <div id="progressSection" class="hidden max-w-4xl">
+                        <div class="bg-zinc-900/40 rounded-xl border border-white/10 p-6 backdrop-blur-md">
+                            <div class="flex items-center justify-between mb-6">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                        <i data-lucide="activity" class="w-5 h-5 text-emerald-400"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-semibold text-zinc-200">Campaign Progress</h3>
+                                        <p class="text-sm text-zinc-400">Sending messages...</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-2xl font-bold text-zinc-200" id="progressPercentage">0%</div>
+                                    <div class="text-xs text-zinc-400">Complete</div>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <div class="w-full bg-zinc-800 rounded-full h-2">
+                                    <div id="progressBar" class="bg-indigo-600 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-6">
+                                <div class="text-center p-4 bg-emerald-500/10 rounded-lg border border-emerald-500/20">
+                                    <div class="text-2xl font-bold text-emerald-400" id="sentCount">0</div>
+                                    <div class="text-sm text-zinc-400">Sent</div>
+                                </div>
+                                <div class="text-center p-4 bg-red-500/10 rounded-lg border border-red-500/20">
+                                    <div class="text-2xl font-bold text-red-400" id="failedCount">0</div>
+                                    <div class="text-sm text-zinc-400">Failed</div>
+                                </div>
+                                <div class="text-center p-4 bg-zinc-800/50 rounded-lg border border-white/10">
+                                    <div class="text-2xl font-bold text-zinc-200" id="totalCount">0</div>
+                                    <div class="text-sm text-zinc-400">Total</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modals -->
+    <!-- QR Modal -->
+    <div id="qrModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop absolute inset-0"></div>
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="bg-zinc-900 rounded-2xl shadow-xl p-8 max-w-md w-full border border-white/10 backdrop-blur-md">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-indigo-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="qr-code" class="w-8 h-8 text-indigo-400"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-zinc-100 mb-2">Connect WhatsApp</h3>
+                    <p class="text-zinc-400 text-sm">Scan this QR code with your WhatsApp</p>
+                </div>
+                <div id="qrCode" class="flex items-center justify-center mb-6 p-4 bg-zinc-800/50 rounded-xl border border-white/10">
+                    <!-- QR Code will be inserted here -->
+                </div>
+                <div class="text-center mb-6">
+                    <p class="text-sm text-zinc-400">
+                        Open WhatsApp → Menu → Linked Devices → Link a Device
+                    </p>
+                </div>
+                <button onclick="closeQR()" class="w-full px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg transition-colors">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop absolute inset-0"></div>
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="bg-zinc-900 rounded-2xl shadow-xl p-6 max-w-md w-full border border-white/10 backdrop-blur-md">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-red-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="alert-triangle" class="w-8 h-8 text-red-400"></i>
+                    </div>
+                    <h3 id="confirmTitle" class="text-xl font-semibold text-zinc-100 mb-2">Confirm Action</h3>
+                    <p id="confirmMessage" class="text-zinc-400 text-sm">Are you sure you want to proceed?</p>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="closeConfirm()" class="flex-1 px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button id="confirmBtn" onclick="confirmAction()" class="flex-1 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Link Input Modal -->
+    <div id="inputModal" class="fixed inset-0 z-50 hidden">
+        <div class="modal-backdrop absolute inset-0"></div>
+        <div class="relative flex items-center justify-center min-h-screen p-4">
+            <div class="bg-zinc-900 rounded-2xl shadow-xl p-6 max-w-md w-full border border-white/10 backdrop-blur-md">
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="link" class="w-8 h-8 text-blue-400"></i>
+                    </div>
+                    <h3 id="inputTitle" class="text-xl font-semibold text-zinc-100 mb-2">Add Link</h3>
+                </div>
+                <input type="url" id="inputField" placeholder="https://example.com" class="w-full px-4 py-3 bg-zinc-800/50 border border-white/20 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent mb-6 text-zinc-200 placeholder-zinc-500">
+                <div class="flex space-x-3">
+                    <button onclick="closeInput()" class="flex-1 px-4 py-3 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button onclick="submitInput()" class="flex-1 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
+                        Insert
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.lucide) {
+                lucide.createIcons({ attrs: { 'stroke-width': 1.5 } });
+            }
+        });
+        
+        let progressInterval;
+        let sessions = [];
+        let recipients = [];
+        let selectedContacts = [];
+        let showingAllRecipients = false;
+        
+        // Navigation
+        function setActiveView(view) {
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+                item.classList.add('text-zinc-400');
+                item.classList.remove('text-zinc-300');
+            });
+            event.currentTarget.classList.add('active');
+            event.currentTarget.classList.remove('text-zinc-400');
+            event.currentTarget.classList.add('text-zinc-300');
+            
+            // Update main content based on view
+            const titles = {
+                'campaigns': 'Create New Campaign',
+                'contacts': 'Contact Management', 
+                'accounts': 'WhatsApp Accounts',
+                'reports': 'Campaign Reports'
+            };
+            
+            const subtitles = {
+                'campaigns': 'Send messages to multiple recipients',
+                'contacts': 'Manage your contact lists',
+                'accounts': 'Connect and manage WhatsApp accounts', 
+                'reports': 'View campaign performance'
+            };
+            
+            const middleTitles = {
+                'campaigns': 'All Campaigns',
+                'contacts': 'Contact Lists',
+                'accounts': 'WhatsApp Accounts',
+                'reports': 'Campaign Reports'
+            };
+            
+            document.getElementById('mainTitle').textContent = titles[view];
+            document.getElementById('mainSubtitle').textContent = subtitles[view];
+            document.getElementById('middlePanelTitle').textContent = middleTitles[view];
+            
+            // Show/hide middle panel content
+            document.querySelectorAll('.middle-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const middleContentMap = {
+                'campaigns': 'campaignsList',
+                'contacts': 'contactsList',
+                'accounts': 'accountsList',
+                'reports': 'reportsList'
+            };
+            
+            document.getElementById(middleContentMap[view]).classList.add('active');
+            
+            // Show/hide main content views
+            document.querySelectorAll('.view-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const viewContentMap = {
+                'campaigns': 'campaignsView',
+                'contacts': 'contactsView',
+                'accounts': 'accountsView',
+                'reports': 'reportsView'
+            };
+            
+            document.getElementById(viewContentMap[view]).classList.add('active');
+            
+            // Load specific view data
+            if (view === 'accounts') {
+                updateAccountsGrid();
+            } else if (view === 'reports') {
+                updateReportsView();
+            } else if (view === 'contacts') {
+                loadSavedContacts();
+            }
+        }
+        
+        function createNewCampaign() {
+            // Switch to campaigns view and reset form
+            setActiveView('campaigns');
+            document.getElementById('campaignForm').reset();
+            document.getElementById('recipientsSection').classList.add('hidden');
+            document.getElementById('progressSection').classList.add('hidden');
+            clearMediaFile();
+            
+            // Reset recipient data
+            recipients = [];
+            selectedContacts = [];
+            
+            // Set default to CSV upload
+            const csvRadio = document.querySelector('input[name="recipientSource"][value="csv"]');
+            if (csvRadio) {
+                csvRadio.checked = true;
+                toggleRecipientSource('csv');
+            }
+            
+            showToast('New campaign created', 'success');
+        }
+        
+        // Load sessions from server
+        async function loadSessions() {
+            try {
+                const res = await fetch('/sessions');
+                const data = await res.json();
+                sessions = data.sessions || [];
+                updateSessionsList();
+                updateSessionSelect();
+                updateAccountsGrid();
+                document.getElementById('accountsCount').textContent = sessions.filter(s => s.isReady).length;
+            } catch (error) {
+                console.error('Error loading sessions:', error);
+                showToast('Failed to load sessions', 'error');
+            }
+        }
+        
+        function updateSessionsList() {
+            const container = document.getElementById('sessionsList');
+            if (sessions.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-4 text-zinc-400">
+                        <i data-lucide="smartphone" class="w-6 h-6 mx-auto mb-2 opacity-50"></i>
+                        <p class="text-xs">No accounts connected</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            container.innerHTML = sessions.map(session => {
+                const isConnected = session.isReady;
+                const phoneDisplay = session.phoneNumber === 'Unknown' ? 'Connecting...' : session.phoneNumber;
+                
+                return `
+                    <div class="conversation-item p-3 rounded-lg cursor-pointer bg-zinc-900/30 border border-white/10">
+                        <div class="flex items-center space-x-3">
+                            <div class="relative">
+                                <div class="w-8 h-8 rounded-full ${isConnected ? 'bg-emerald-500/20' : 'bg-zinc-700'} flex items-center justify-center">
+                                    <i data-lucide="smartphone" class="w-4 h-4 ${isConnected ? 'text-emerald-400' : 'text-zinc-400'}"></i>
+                                </div>
+                                ${isConnected ? '<div class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full border border-zinc-900 status-indicator"></div>' : ''}
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <div class="font-medium text-sm text-zinc-200 truncate">${phoneDisplay}</div>
+                                <div class="text-xs text-zinc-400">${isConnected ? 'Connected' : 'Disconnected'}</div>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                ${!isConnected ? `
+                                    <button onclick="showQR('${session.id}')" class="p-1 hover:bg-zinc-800 rounded" title="Connect">
+                                        <i data-lucide="qr-code" class="w-3 h-3 text-indigo-400"></i>
+                                    </button>
+                                ` : ''}
+                                <button onclick="deleteSession('${session.id}')" class="p-1 hover:bg-zinc-800 rounded" title="Remove">
+                                    <i data-lucide="trash-2" class="w-3 h-3 text-red-400"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+        
+        function updateSessionSelect() {
+            const select = document.getElementById('sessionSelect');
+            const readySessions = sessions.filter(s => s.isReady);
+            
+            select.innerHTML = '<option value="">Select WhatsApp account</option>' +
+                readySessions.map(session => 
+                    `<option value="${session.id}">${session.phoneNumber}</option>`
+                ).join('');
+        }
+        
+        // Update accounts grid for accounts view
+        function updateAccountsGrid() {
+            const grid = document.getElementById('accountsGrid');
+            if (sessions.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 text-zinc-400">
+                        <i data-lucide="smartphone" class="w-16 h-16 mx-auto mb-4 opacity-50"></i>
+                        <p class="font-medium mb-2 text-zinc-300">No WhatsApp accounts connected</p>
+                        <p class="text-sm mb-4">Connect your first WhatsApp account to start sending messages</p>
+                        <button onclick="addNewSession()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                            Connect Account
+                        </button>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            grid.innerHTML = sessions.map(session => {
+                const isConnected = session.isReady;
+                const phoneDisplay = session.phoneNumber === 'Unknown' ? 'Connecting...' : session.phoneNumber;
+                
+                return `
+                    <div class="bg-zinc-900/30 rounded-lg p-4 border border-white/10 backdrop-blur-md">
+                        <div class="flex items-center justify-between mb-3">
+                            <div class="flex items-center space-x-3">
+                                <div class="relative">
+                                    <div class="w-10 h-10 rounded-full ${isConnected ? 'bg-emerald-500/20' : 'bg-zinc-700'} flex items-center justify-center">
+                                        <i data-lucide="smartphone" class="w-5 h-5 ${isConnected ? 'text-emerald-400' : 'text-zinc-400'}"></i>
+                                    </div>
+                                    ${isConnected ? '<div class="absolute -bottom-1 -right-1 w-3 h-3 bg-emerald-500 rounded-full border-2 border-zinc-900"></div>' : ''}
+                                </div>
+                                <div>
+                                    <div class="font-medium text-zinc-200">${phoneDisplay}</div>
+                                    <div class="text-xs text-zinc-400">${isConnected ? 'Connected' : 'Disconnected'}</div>
+                                </div>
+                            </div>
+                            <button onclick="deleteSession('${session.id}')" class="text-red-400 hover:text-red-300 p-1">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                        
+                        ${!isConnected ? `
+                            <button onclick="showQR('${session.id}')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 px-3 rounded text-sm font-medium transition-colors">
+                                Connect Account
+                            </button>
+                        ` : `
+                            <div class="space-y-2">
+                                <div class="text-center py-2">
+                                    <span class="text-emerald-400 text-sm font-medium">✓ Ready to send</span>
+                                </div>
+                                <button onclick="testMessage('${session.id}')" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded text-xs font-medium transition-colors">
+                                    Test Message
+                                </button>
+                            </div>
+                        `}
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+        
+        // Update reports view
+        function updateReportsView() {
+            loadReports();
+        }
+        
+        // Upload contact list
+        function uploadContactList() {
+            document.getElementById('contactFileInput').click();
+        }
+        
+        // Handle contact file upload
+        document.getElementById('contactFileInput').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('csv', file);
+                
+                try {
+                    const res = await fetch('/contacts/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    const data = await res.json();
+                    
+                    if (res.ok) {
+                        savedContacts = data.contacts;
+                        updateContactsMiddlePanel();
+                        updateSavedContactsList();
+                        showToast(`${data.newContacts} contacts uploaded and saved successfully`, 'success');
+                    } else {
+                        showToast(data.error || 'Failed to upload contacts', 'error');
+                    }
+                } catch (error) {
+                    showToast('Error uploading contacts', 'error');
+                }
+                
+                // Reset file input
+                e.target.value = '';
+            }
+        });
+        
+        async function addNewSession() {
+            try {
+                const res = await fetch('/sessions', { method: 'POST' });
+                const data = await res.json();
+                showToast('New session created. Please scan QR code.', 'success');
+                setTimeout(() => {
+                    loadSessions();
+                    showQR(data.sessionId);
+                }, 1000);
+            } catch (error) {
+                showToast('Error creating session', 'error');
+            }
+        }
+        
+        async function showQR(sessionId) {
+            try {
+                let attempts = 0;
+                const maxAttempts = 10;
+                
+                const waitForQR = async () => {
+                    const res = await fetch(`/sessions/${sessionId}/qr`);
+                    const data = await res.json();
+                    
+                    if (data.status === 'authenticated') {
+                        showToast('Already connected!', 'success');
+                        loadSessions();
+                        return;
+                    }
+                    
+                    if (data.qr) {
+                        document.getElementById('qrCode').innerHTML = `<img src="${data.qr}" alt="QR Code" class="max-w-full h-auto" />`;
+                        document.getElementById('qrModal').classList.remove('hidden');
+                        
+                        const checkConnection = setInterval(async () => {
+                            try {
+                                const res = await fetch(`/sessions/${sessionId}/qr`);
+                                const data = await res.json();
+                                if (data.status === 'authenticated') {
+                                    clearInterval(checkConnection);
+                                    closeQR();
+                                    showToast(`WhatsApp connected: ${data.phoneNumber}`, 'success');
+                                    loadSessions();
+                                }
+                            } catch (error) {
+                                clearInterval(checkConnection);
+                                console.error('Connection check error:', error);
+                            }
+                        }, 2000);
+                        return;
+                    }
+                    
+                    if (attempts < maxAttempts) {
+                        attempts++;
+                        setTimeout(waitForQR, 1000);
+                    } else {
+                        showToast('QR code not ready. Please try again.', 'warning');
+                    }
+                };
+                
+                waitForQR();
+            } catch (error) {
+                showToast('Connection error', 'error');
+            }
+        }
+        
+        let confirmCallback = null;
+        
+        function deleteSession(sessionId) {
+            document.getElementById('confirmTitle').textContent = 'Delete Account';
+            document.getElementById('confirmMessage').textContent = 'Are you sure you want to disconnect this WhatsApp account?';
+            document.getElementById('confirmModal').classList.remove('hidden');
+            
+            confirmCallback = async () => {
+                try {
+                    await fetch(`/sessions/${sessionId}`, { method: 'DELETE' });
+                    showToast('Account disconnected', 'success');
+                    loadSessions();
+                } catch (error) {
+                    showToast('Error disconnecting account', 'error');
+                }
+            };
+        }
+        
+        function closeConfirm() {
+            document.getElementById('confirmModal').classList.add('hidden');
+            confirmCallback = null;
+        }
+        
+        function confirmAction() {
+            if (confirmCallback) confirmCallback();
+            closeConfirm();
+        }
+        
+        function closeQR() {
+            document.getElementById('qrModal').classList.add('hidden');
+        }
+        
+        // Text formatting functions
+        function formatText(format) {
+            const textarea = document.querySelector('textarea[name="message"]');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            
+            if (selectedText) {
+                let formattedText;
+                switch(format) {
+                    case 'bold':
+                        formattedText = `*${selectedText}*`;
+                        break;
+                    case 'italic':
+                        formattedText = `_${selectedText}_`;
+                        break;
+                    case 'strikethrough':
+                        formattedText = `~${selectedText}~`;
+                        break;
+                }
+                
+                textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+                textarea.focus();
+                textarea.setSelectionRange(start, start + formattedText.length);
+            } else {
+                showToast('Please select text to format', 'info');
+            }
+        }
+        
+        let inputCallback = null;
+        
+        function insertLink() {
+            document.getElementById('inputModal').classList.remove('hidden');
+            document.getElementById('inputField').focus();
+            
+            inputCallback = (value) => {
+                if (value) {
+                    const textarea = document.querySelector('textarea[name="message"]');
+                    const pos = textarea.selectionStart;
+                    textarea.value = textarea.value.substring(0, pos) + value + textarea.value.substring(pos);
+                    textarea.focus();
+                }
+            };
+        }
+        
+        function closeInput() {
+            document.getElementById('inputModal').classList.add('hidden');
+            inputCallback = null;
+        }
+        
+        function submitInput() {
+            const value = document.getElementById('inputField').value.trim();
+            if (inputCallback) inputCallback(value);
+            closeInput();
+        }
+        
+        function clearMediaFile() {
+            const mediaInput = document.querySelector('input[name="media"]');
+            const uploadDiv = document.getElementById('mediaUpload');
+            const textDiv = uploadDiv.querySelector('.file-upload-text');
+            const subtextDiv = uploadDiv.querySelector('.file-upload-subtext');
+            const preview = document.getElementById('mediaPreview');
+            
+            if (mediaInput) mediaInput.value = '';
+            textDiv.textContent = 'Drop media files here or click to browse';
+            subtextDiv.textContent = 'Multiple images, documents supported';
+            uploadDiv.classList.remove('border-indigo-400', 'border-blue-400');
+            uploadDiv.classList.add('border-white/20');
+            preview.classList.add('hidden');
+            preview.innerHTML = '';
+        }
+        
+        function removeMediaFile(index) {
+            const mediaInput = document.querySelector('input[name="media"]');
+            const dt = new DataTransfer();
+            const files = Array.from(mediaInput.files);
+            
+            files.splice(index, 1);
+            files.forEach(file => dt.items.add(file));
+            mediaInput.files = dt.files;
+            
+            updateMediaPreview(mediaInput.files);
+        }
+        
+        function updateMediaPreview(files) {
+            const preview = document.getElementById('mediaPreview');
+            
+            if (files.length === 0) {
+                preview.classList.add('hidden');
+                preview.innerHTML = '';
+                return;
+            }
+            
+            preview.classList.remove('hidden');
+            preview.innerHTML = Array.from(files).map((file, index) => {
+                const isImage = file.type.startsWith('image/');
+                const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+                
+                return `
+                    <div class="flex items-center justify-between p-3 bg-zinc-900/50 rounded-lg border border-white/10">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 ${isImage ? 'bg-emerald-500/20' : 'bg-blue-500/20'} rounded-lg flex items-center justify-center">
+                                <i data-lucide="${isImage ? 'image' : 'file'}" class="w-5 h-5 ${isImage ? 'text-emerald-400' : 'text-blue-400'}"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs px-2 py-1 ${isImage ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'} rounded-full inline-block mb-1">
+                                    ${isImage ? 'Image' : 'Document'}
+                                </div>
+                                <div class="text-sm text-zinc-300">${file.name} (${fileSizeMB} MB)</div>
+                            </div>
+                        </div>
+                        <button type="button" onclick="removeMediaFile(${index})" class="text-red-400 hover:text-red-300 p-1">
+                            <i data-lucide="x" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                `;
+            }).join('');
+            
+            lucide.createIcons();
+        }
+        
+        // Toast notification system
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            const bgColors = {
+                success: 'bg-emerald-600',
+                error: 'bg-red-600', 
+                warning: 'bg-yellow-600',
+                info: 'bg-blue-600'
+            };
+            
+            const icons = {
+                success: 'check-circle',
+                error: 'x-circle',
+                warning: 'alert-triangle', 
+                info: 'info'
+            };
+            
+            toast.className = `fixed top-4 right-4 ${bgColors[type]} text-white p-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 max-w-sm z-50 border border-white/10 backdrop-blur-md`;
+            toast.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i data-lucide="${icons[type]}" class="w-5 h-5 flex-shrink-0"></i>
+                    <span class="text-sm font-medium">${message}</span>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-auto">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => toast.classList.remove('translate-x-full'), 100);
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        }
+        
+        // Progress tracking
+        function updateProgress() {
+            fetch('/progress')
+                .then(res => res.json())
+                .then(data => {
+                    const { total, sent, failed, inProgress } = data;
+                    
+                    if (total > 0) {
+                        const percentage = ((sent + failed) / total) * 100;
+                        document.getElementById('progressBar').style.width = percentage + '%';
+                        document.getElementById('progressPercentage').textContent = Math.round(percentage) + '%';
+                        document.getElementById('sentCount').textContent = sent;
+                        document.getElementById('failedCount').textContent = failed;
+                        document.getElementById('totalCount').textContent = total;
+                        document.getElementById('totalSentSidebar').textContent = sent;
+                        document.getElementById('totalSentDisplay').textContent = `${sent} messages sent today`;
+                        
+                        if (!inProgress && (sent + failed) === total) {
+                            clearInterval(progressInterval);
+                            showToast(`Campaign completed! Sent: ${sent}, Failed: ${failed}`, 'success');
+                            document.getElementById('sendBtn').disabled = false;
+                            document.getElementById('sendBtn').innerHTML = `
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                                <span>Send Campaign</span>
+                            `;
+                            lucide.createIcons();
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Progress update error:', error);
+                });
+        }
+        
+        // Recipients management
+        function displayRecipients(numbers) {
+            recipients = numbers;
+            const section = document.getElementById('recipientsSection');
+            const list = document.getElementById('recipientsList');
+            const count = document.getElementById('recipientCount');
+            
+            count.textContent = numbers.length;
+            
+            const displayNumbers = showingAllRecipients ? numbers : numbers.slice(0, 9);
+            
+            list.innerHTML = displayNumbers.map((number, index) => `
+                <div class="flex items-center justify-between p-3 bg-zinc-900/50 rounded-lg border border-white/10" style="animation: fadeIn 0.3s ease-out ${index * 0.1}s both;">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                            <i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i>
+                        </div>
+                        <span class="font-medium text-zinc-200 text-sm">${number}</span>
+                    </div>
+                    <div class="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                </div>
+            `).join('');
+            
+            if (numbers.length > 9) {
+                const toggleBtn = document.getElementById('toggleBtn');
+                toggleBtn.classList.remove('hidden');
+                toggleBtn.innerHTML = showingAllRecipients ? 
+                    '<span>Show Less</span><i data-lucide="chevron-up" class="w-4 h-4"></i>' :
+                    `<span>Show All (${numbers.length - 9} more)</span><i data-lucide="chevron-down" class="w-4 h-4"></i>`;
+            }
+            
+            section.classList.remove('hidden');
+            lucide.createIcons();
+        }
+        
+        function toggleRecipients() {
+            showingAllRecipients = !showingAllRecipients;
+            displayRecipients(recipients);
+        }
+        
+        // Auto-detect message type based on content and media
+        function detectMessageType() {
+            const mediaFiles = document.querySelector('input[name="media"]').files;
+            const messageText = document.querySelector('textarea[name="message"]').value;
+            
+            // System will automatically handle:
+            // - Text only: if no media files
+            // - Text with media: if both text and media
+            // - Media only: if only media files
+            // - Multiple media: if multiple files
+            
+            return 'auto'; // Let backend determine the best approach
+        }
+        
+        // File upload handling
+        document.querySelectorAll('input[type="file"]').forEach(input => {
+            input.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                const uploadDiv = e.target.name === 'csv' ? document.getElementById('csvUpload') : document.getElementById('mediaUpload');
+                const textDiv = uploadDiv.querySelector('.file-upload-text');
+                const subtextDiv = uploadDiv.querySelector('.file-upload-subtext');
+                
+                if (file) {
+                    textDiv.textContent = file.name;
+                    const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+                    
+                    if (e.target.name === 'csv') {
+                        subtextDiv.textContent = `CSV file • ${fileSizeMB} MB`;
+                        uploadDiv.classList.remove('border-white/20');
+                        uploadDiv.classList.add('border-indigo-400/50');
+                        
+                        // Parse CSV to show recipients
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const csv = event.target.result;
+                            const lines = csv.split('\n').filter(line => line.trim());
+                            if (lines.length === 0) return;
+                            
+                            const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+                            const phoneIndex = headers.findIndex(h => h === 'number' || h === 'phone' || h === 'mobile');
+                            
+                            if (phoneIndex === -1) {
+                                showToast('CSV must contain a "number" or "phone" column', 'error');
+                                return;
+                            }
+                            
+                            const numbers = lines.slice(1)
+                                .map(line => line.split(',')[phoneIndex])
+                                .filter(num => num && num.trim())
+                                .map(num => num.trim());
+                            
+                            if (numbers.length > 0) {
+                                displayRecipients(numbers);
+                                showToast(`Loaded ${numbers.length} recipients`, 'success');
+                            } else {
+                                showToast('No valid phone numbers found in CSV', 'warning');
+                            }
+                        };
+                        reader.readAsText(file);
+                        
+                    } else if (e.target.name === 'media') {
+                        const files = e.target.files;
+                        let totalSize = 0;
+                        let hasOversizedFile = false;
+                        
+                        // Check all files
+                        Array.from(files).forEach(file => {
+                            const fileSizeMB = file.size / 1024 / 1024;
+                            const isImage = file.type.startsWith('image/');
+                            const maxSize = isImage ? 5 : 16;
+                            
+                            totalSize += fileSizeMB;
+                            
+                            if (fileSizeMB > maxSize) {
+                                hasOversizedFile = true;
+                                showToast(`${file.name} exceeds ${maxSize}MB limit`, 'error');
+                            }
+                        });
+                        
+                        if (hasOversizedFile) {
+                            e.target.value = '';
+                            return;
+                        }
+                        
+                        if (files.length > 0) {
+                            textDiv.textContent = `${files.length} file(s) selected`;
+                            subtextDiv.textContent = `Total size: ${totalSize.toFixed(2)} MB`;
+                            uploadDiv.classList.remove('border-white/20');
+                            uploadDiv.classList.add('border-indigo-400/50');
+                            
+                            updateMediaPreview(files);
+                        }
+                    }
+                } else {
+                    // Reset to original state
+                    if (e.target.name === 'csv') {
+                        textDiv.textContent = 'Drop CSV file here or click to browse';
+                        subtextDiv.textContent = "CSV with 'number' or 'phone' column";
+                        document.getElementById('recipientsSection').classList.add('hidden');
+                    } else {
+                        textDiv.textContent = 'Drop media file here or click to browse';
+                        subtextDiv.textContent = 'Images, documents supported';
+                        document.getElementById('mediaPreview').classList.add('hidden');
+                    }
+                    uploadDiv.classList.remove('border-indigo-400/50', 'border-blue-400/50', 'border-red-400/50');
+                    uploadDiv.classList.add('border-white/20');
+                }
+            });
+        });
+        
+        // Form submission
+        document.getElementById('campaignForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            let formData = new FormData(e.target);
+            const sessionId = formData.get('sessionId');
+            const messageText = formData.get('message');
+            const campaignName = formData.get('campaignName') || 'Untitled Campaign';
+            const scheduledTime = formData.get('scheduledTime');
+            const recipientSource = document.querySelector('input[name="recipientSource"]:checked').value;
+            
+            if (!sessionId) {
+                showToast('Please select a WhatsApp account', 'error');
+                return;
+            }
+            
+            // Determine recipients
+            let recipientsList = [];
+            if (recipientSource === 'saved') {
+                if (selectedContacts.length === 0) {
+                    showToast('Please select at least one contact', 'error');
+                    return;
+                }
+                recipientsList = selectedContacts;
+                console.log('Using saved contacts:', recipientsList);
+            } else {
+                if (recipients.length === 0) {
+                    showToast('Please upload a CSV file with recipients', 'error');
+                    return;
+                }
+                recipientsList = recipients;
+                console.log('Using CSV recipients:', recipientsList);
+            }
+            
+            // Validate recipients list
+            if (!recipientsList || recipientsList.length === 0) {
+                showToast('No recipients selected', 'error');
+                return;
+            }
+            
+            if (!messageText || messageText.trim().length === 0) {
+                showToast('Please enter a message', 'error');
+                return;
+            }
+            
+            if (messageText.trim().length > 4096) {
+                showToast('Message is too long. Maximum 4096 characters allowed.', 'error');
+                return;
+            }
+            
+            // Check scheduling
+            if (scheduledTime) {
+                const scheduleDate = new Date(scheduledTime);
+                const now = new Date();
+                if (scheduleDate <= now) {
+                    showToast('Scheduled time must be in the future', 'error');
+                    return;
+                }
+            }
+            
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = `
+                <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                <span>${scheduledTime ? 'Scheduling...' : 'Sending...'}</span>
+            `;
+            
+            try {
+                // Add request data to form
+                formData.append('sessionId', sessionId);
+                formData.append('message', messageText);
+                formData.append('campaignName', campaignName);
+                if (scheduledTime) formData.append('scheduledTime', scheduledTime);
+                
+                // Create clean FormData to avoid duplicates
+                const cleanFormData = new FormData();
+                
+                // Copy files
+                if (formData.get('csv')) cleanFormData.append('csv', formData.get('csv'));
+                const mediaFiles = formData.getAll('media');
+                mediaFiles.forEach(file => cleanFormData.append('media', file));
+                
+                // Add clean data
+                cleanFormData.append('sessionId', sessionId);
+                cleanFormData.append('message', messageText);
+                cleanFormData.append('campaignName', campaignName);
+                if (scheduledTime) cleanFormData.append('scheduledTime', scheduledTime);
+                
+                if (recipientSource === 'saved' && recipientsList.length > 0) {
+                    cleanFormData.append('recipients', JSON.stringify(recipientsList));
+                    console.log('Added saved contacts to form:', recipientsList);
+                } else if (recipientSource === 'csv' && recipientsList.length > 0) {
+                    cleanFormData.append('recipients', JSON.stringify(recipientsList));
+                    console.log('Added CSV recipients to form:', recipientsList);
+                }
+                
+                formData = cleanFormData;
+                
+                const res = await fetch('/send', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    if (scheduledTime) {
+                        showToast(`Campaign scheduled for ${new Date(scheduledTime).toLocaleString()}`, 'success');
+                        // Reset form
+                        document.getElementById('campaignForm').reset();
+                        document.getElementById('recipientsSection').classList.add('hidden');
+                        clearMediaFile();
+                        selectedContacts = [];
+                        recipients = [];
+                        
+                        // Reset to default CSV mode
+                        const csvRadio = document.querySelector('input[name="recipientSource"][value="csv"]');
+                        if (csvRadio) {
+                            csvRadio.checked = true;
+                            toggleRecipientSource('csv');
+                        }
+                    } else {
+                        document.getElementById('campaignsView').classList.add('hidden');
+                        document.getElementById('progressSection').classList.remove('hidden');
+                        
+                        showToast(`Campaign started! Sending messages to ${data.total} recipients`, 'success');
+                        progressInterval = setInterval(updateProgress, 1000);
+                        
+                        // Reset form data after successful submission
+                        recipients = [];
+                        selectedContacts = [];
+                    }
+                } else {
+                    console.error('Server error response:', data);
+                    showToast(data.error || 'Error processing campaign', 'error');
+                }
+            } catch (error) {
+                console.error('Network error:', error);
+                showToast('Network error. Please check your connection.', 'error');
+            } finally {
+                sendBtn.disabled = false;
+                sendBtn.innerHTML = `
+                    <i data-lucide="send" class="w-5 h-5"></i>
+                    <span>${scheduledTime ? 'Schedule Campaign' : 'Send Campaign'}</span>
+                `;
+                lucide.createIcons();
+            }
+        });
+        
+        // New variables for enhanced functionality
+        let savedContacts = [];
+        let aiGeneratorVisible = false;
+        let successFailChart = null;
+        let campaignChart = null;
+        
+        // Load saved contacts
+        async function loadSavedContacts() {
+            try {
+                const res = await fetch('/contacts');
+                const data = await res.json();
+                savedContacts = data.contacts || [];
+                updateSavedContactsList();
+                updateContactsMiddlePanel();
+            } catch (error) {
+                console.error('Error loading contacts:', error);
+            }
+        }
+        
+        // Update contacts in middle panel
+        function updateContactsMiddlePanel() {
+            const container = document.getElementById('contactsContent');
+            
+            if (savedContacts.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-zinc-400">
+                        <i data-lucide="users" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                        <p class="font-medium mb-1 text-zinc-300">No contacts saved</p>
+                        <p class="text-sm">Upload CSV files to save contacts</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="space-y-3">
+                    <div class="text-sm text-zinc-400 mb-3">${savedContacts.length} contacts saved</div>
+                    ${savedContacts.slice(0, 10).map(contact => `
+                        <div class="flex items-center justify-between p-3 bg-zinc-900/30 rounded-lg border border-white/10">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                                    <i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium text-zinc-200">${contact.name || contact.number}</div>
+                                    <div class="text-xs text-zinc-400">${contact.number}</div>
+                                </div>
+                            </div>
+                            <button onclick="deleteContactFromList('${contact.number}')" class="text-red-400 hover:text-red-300 p-1">
+                                <i data-lucide="trash-2" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    `).join('')}
+                    ${savedContacts.length > 10 ? `<div class="text-center text-sm text-zinc-400 py-2">... and ${savedContacts.length - 10} more</div>` : ''}
+                </div>
+            `;
+            lucide.createIcons();
+        }
+        
+        // Delete contact from list
+        async function deleteContactFromList(number) {
+            try {
+                const res = await fetch(`/contacts/${number}`, { method: 'DELETE' });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    savedContacts = data.contacts;
+                    updateSavedContactsList();
+                    updateContactsMiddlePanel();
+                    showToast('Contact deleted successfully', 'success');
+                } else {
+                    showToast('Failed to delete contact', 'error');
+                }
+            } catch (error) {
+                showToast('Error deleting contact', 'error');
+            }
+        }
+        
+        // Update saved contacts list (for campaign selection)
+        function updateSavedContactsList() {
+            const container = document.getElementById('savedContactsList');
+            if (savedContacts.length === 0) {
+                container.innerHTML = '<p class="text-sm text-zinc-400 text-center py-4">No saved contacts</p>';
+                return;
+            }
+            
+            container.innerHTML = savedContacts.map(contact => `
+                <label class="flex items-center space-x-3 p-2 hover:bg-zinc-800/50 rounded cursor-pointer">
+                    <input type="checkbox" value="${contact.number}" class="contact-checkbox text-indigo-600" onchange="updateSelectedContacts()">
+                    <div class="flex-1">
+                        <div class="text-sm font-medium text-zinc-200">${contact.name || contact.number}</div>
+                        <div class="text-xs text-zinc-400">${contact.number}</div>
+                    </div>
+                </label>
+            `).join('');
+            
+            // Update contacts view grid
+            updateContactsViewGrid();
+        }
+        
+        // Update contacts view grid
+        function updateContactsViewGrid() {
+            const grid = document.getElementById('savedContactsGrid');
+            const countElement = document.getElementById('contactsCount');
+            
+            if (savedContacts.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-8 text-zinc-400">
+                        <i data-lucide="users" class="w-12 h-12 mx-auto mb-3 opacity-50"></i>
+                        <p class="font-medium mb-1 text-zinc-300">No contacts saved</p>
+                        <p class="text-sm">Upload a CSV file to add contacts</p>
+                    </div>
+                `;
+                countElement.textContent = '0 contacts saved';
+                lucide.createIcons();
+                return;
+            }
+            
+            countElement.textContent = `${savedContacts.length} contacts saved`;
+            
+            grid.innerHTML = savedContacts.map(contact => `
+                <div class="border border-white/10 rounded-lg p-4 hover:bg-zinc-900/30 bg-zinc-900/20 backdrop-blur-md">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-8 h-8 bg-emerald-500/20 rounded-full flex items-center justify-center">
+                                <i data-lucide="phone" class="w-4 h-4 text-emerald-400"></i>
+                            </div>
+                            <div class="font-medium text-zinc-200 text-sm truncate">${contact.name || 'Contact'}</div>
+                        </div>
+                        <button onclick="deleteContactFromGrid('${contact.number}')" class="text-red-400 hover:text-red-300 p-1">
+                            <i data-lucide="trash-2" class="w-3 h-3"></i>
+                        </button>
+                    </div>
+                    <div class="text-xs text-zinc-400 mb-2">${contact.number}</div>
+                    <div class="text-xs text-zinc-500">
+                        Added: ${new Date(contact.addedAt || Date.now()).toLocaleDateString()}
+                    </div>
+                </div>
+            `).join('');
+            
+            lucide.createIcons();
+        }
+        
+        // Delete contact from grid
+        async function deleteContactFromGrid(number) {
+            if (confirm('Are you sure you want to delete this contact?')) {
+                await deleteContactFromList(number);
+            }
+        }
+        
+        // Refresh contacts
+        function refreshContacts() {
+            loadSavedContacts();
+            showToast('Contacts refreshed', 'info');
+        }
+        
+        // Toggle recipient source
+        function toggleRecipientSource(source) {
+            const csvSection = document.getElementById('csvUploadSection');
+            const savedSection = document.getElementById('savedContactsSection');
+            const csvInput = document.querySelector('input[name="csv"]');
+            
+            if (source === 'saved') {
+                csvSection.classList.add('hidden');
+                savedSection.classList.remove('hidden');
+                if (csvInput) csvInput.removeAttribute('required');
+                loadSavedContacts();
+                // Clear CSV recipients when switching to saved contacts
+                recipients = [];
+                document.getElementById('recipientsSection').classList.add('hidden');
+            } else {
+                csvSection.classList.remove('hidden');
+                savedSection.classList.add('hidden');
+                if (csvInput) csvInput.setAttribute('required', 'required');
+                // Clear saved contacts selection when switching to CSV
+                selectedContacts = [];
+                document.querySelectorAll('.contact-checkbox').forEach(cb => cb.checked = false);
+            }
+        }
+        
+        // Update selected contacts
+        function updateSelectedContacts() {
+            const checkboxes = document.querySelectorAll('.contact-checkbox:checked');
+            selectedContacts = Array.from(checkboxes).map(cb => cb.value);
+            console.log('Selected contacts updated:', selectedContacts);
+        }
+        
+        // Select/deselect all contacts
+        function selectAllContacts() {
+            document.querySelectorAll('.contact-checkbox').forEach(cb => {
+                cb.checked = true;
+            });
+            updateSelectedContacts();
+        }
+        
+        function deselectAllContacts() {
+            document.querySelectorAll('.contact-checkbox').forEach(cb => {
+                cb.checked = false;
+            });
+            updateSelectedContacts();
+        }
+        
+        // Toggle scheduling
+        function toggleScheduling() {
+            const checkbox = document.getElementById('scheduleCheckbox');
+            const section = document.getElementById('scheduleSection');
+            
+            if (checkbox.checked) {
+                section.classList.remove('hidden');
+                // Set minimum date to current time + 5 minutes
+                const now = new Date();
+                now.setMinutes(now.getMinutes() + 5);
+                const minDateTime = now.toISOString().slice(0, 16);
+                section.querySelector('input').setAttribute('min', minDateTime);
+            } else {
+                section.classList.add('hidden');
+            }
+        }
+        
+        // Toggle AI generator
+        function toggleAIGenerator() {
+            const section = document.getElementById('aiGeneratorSection');
+            const btn = document.getElementById('aiToggleBtn');
+            
+            aiGeneratorVisible = !aiGeneratorVisible;
+            
+            if (aiGeneratorVisible) {
+                section.classList.remove('hidden');
+                btn.textContent = 'Hide AI Generator';
+                loadAILanguages();
+            } else {
+                section.classList.add('hidden');
+                btn.textContent = 'Show AI Generator';
+            }
+        }
+        
+        // Load AI languages
+        async function loadAILanguages() {
+            try {
+                const res = await fetch('/ai/languages');
+                const data = await res.json();
+                const select = document.getElementById('aiLanguage');
+                
+                select.innerHTML = data.languages.map(lang => 
+                    `<option value="${lang.name}">${lang.name}</option>`
+                ).join('');
+            } catch (error) {
+                console.error('Error loading languages:', error);
+            }
+        }
+        
+        // Generate AI message
+        async function generateAIMessage() {
+            const btn = document.getElementById('generateBtn');
+            const originalText = btn.textContent;
+            const prompt = document.getElementById('aiPrompt').value.trim();
+            
+            if (!prompt) {
+                showToast('Please describe what you want to communicate', 'warning');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = '<div class="animate-spin rounded-full h-4 w-4 border-b-2 border-white mx-auto"></div>';
+            
+            try {
+                const language = document.getElementById('aiLanguage').value;
+                
+                const res = await fetch('/ai/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ language, prompt })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('messageTextarea').value = data.message;
+                    showToast('AI message generated successfully!', 'success');
+                } else {
+                    document.getElementById('messageTextarea').value = data.fallbackMessage;
+                    showToast('Using fallback message template', 'warning');
+                }
+            } catch (error) {
+                showToast('Failed to generate AI message', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+        }
+        
+        // Load and display reports
+        async function loadReports(date = null) {
+            try {
+                const url = date ? `/reports?date=${date}` : '/reports';
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                displayReports(data.reports);
+                updateReportCharts(data.reports);
+                
+                // Load stats
+                const statsRes = await fetch('/reports/stats');
+                const statsData = await statsRes.json();
+                updateReportStats(statsData.stats);
+            } catch (error) {
+                console.error('Error loading reports:', error);
+            }
+        }
+        
+        // Display reports list
+        function displayReports(reports) {
+            const container = document.getElementById('campaignReportsList');
+            
+            if (reports.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-zinc-400">
+                        <i data-lucide="bar-chart-3" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+                        <p class="text-sm">No reports available</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+            
+            container.innerHTML = reports.map(report => {
+                const date = new Date(report.createdAt).toLocaleDateString();
+                const time = new Date(report.createdAt).toLocaleTimeString();
+                
+                return `
+                    <div class="border border-white/10 rounded-lg p-4 hover:bg-zinc-900/30 cursor-pointer bg-zinc-900/20 backdrop-blur-md" onclick="showReportDetails('${report.id}')">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h4 class="font-medium text-zinc-200">Campaign Report</h4>
+                                <p class="text-sm text-zinc-400">${date} at ${time}</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-medium text-zinc-200">${report.sent || 0} sent, ${report.failed || 0} failed</div>
+                                <div class="text-xs text-zinc-400">${report.successRate || 0}% success rate</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Update report statistics
+        function updateReportStats(stats) {
+            document.getElementById('totalSentReport').textContent = stats.totalSent;
+            document.getElementById('totalCampaigns').textContent = stats.totalCampaigns;
+            document.getElementById('totalFailedReport').textContent = stats.totalFailed;
+            document.getElementById('successRate').textContent = stats.successRate + '%';
+        }
+        
+        // Update report charts
+        function updateReportCharts(reports) {
+            const totalSent = reports.reduce((sum, r) => sum + (r.sent || 0), 0);
+            const totalFailed = reports.reduce((sum, r) => sum + (r.failed || 0), 0);
+            
+            // Success vs Failed Chart
+            const ctx1 = document.getElementById('successFailChart').getContext('2d');
+            if (successFailChart) successFailChart.destroy();
+            
+            successFailChart = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Successful', 'Failed'],
+                    datasets: [{
+                        data: [totalSent, totalFailed],
+                        backgroundColor: ['#10b981', '#ef4444'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#d4d4d8'
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Campaign Performance Chart
+            const ctx2 = document.getElementById('campaignChart').getContext('2d');
+            if (campaignChart) campaignChart.destroy();
+            
+            const campaignData = reports.slice(-7).map(report => ({
+                label: new Date(report.createdAt).toLocaleDateString(),
+                sent: report.sent || 0,
+                failed: report.failed || 0
+            }));
+            
+            campaignChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: campaignData.map(d => d.label),
+                    datasets: [
+                        {
+                            label: 'Sent',
+                            data: campaignData.map(d => d.sent),
+                            backgroundColor: '#10b981'
+                        },
+                        {
+                            label: 'Failed',
+                            data: campaignData.map(d => d.failed),
+                            backgroundColor: '#ef4444'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                color: '#d4d4d8'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: '#d4d4d8'
+                            },
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#d4d4d8'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Filter reports by date
+        function filterReportsByDate() {
+            const date = document.getElementById('reportDate').value;
+            if (date) {
+                loadReports(date);
+            }
+        }
+        
+        // Clear date filter
+        function clearDateFilter() {
+            document.getElementById('reportDate').value = '';
+            loadReports();
+        }
+        
+        // Show report details
+        function showReportDetails(reportId) {
+            // Implementation for showing detailed report
+            showToast('Report details feature coming soon', 'info');
+        }
+        
+        // Test message sending
+        async function testMessage(sessionId) {
+            try {
+                const res = await fetch(`/sessions/${sessionId}/test`, { method: 'POST' });
+                const data = await res.json();
+                
+                if (data.success) {
+                    showToast('Test message sent successfully!', 'success');
+                } else {
+                    showToast(`Test failed: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showToast('Test message failed', 'error');
+            }
+        }
+        
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSessions();
+            loadSavedContacts();
+            
+            // Set default recipient source to CSV
+            const csvRadio = document.querySelector('input[name="recipientSource"][value="csv"]');
+            if (csvRadio) {
+                csvRadio.checked = true;
+                toggleRecipientSource('csv');
+            }
+            
+            setInterval(loadSessions, 10000); // Refresh every 10 seconds
+        });
+        
+        // Modal event listeners
+        document.getElementById('qrModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeQR();
+        });
+        
+        document.getElementById('confirmModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeConfirm();
+        });
+        
+        document.getElementById('inputModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeInput();
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeQR();
+                closeConfirm();  
+                closeInput();
+            }
+            if (e.key === 'Enter' && !document.getElementById('inputModal').classList.contains('hidden')) {
+                e.preventDefault();
+                submitInput();
+            }
+        });
+    </script>
+</body>
+</html>

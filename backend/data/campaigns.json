@@ -1,0 +1,322 @@
+[
+  {
+    "name": "test",
+    "sessionId": "session_1758704978048",
+    "message": "**🚀 Exclusive Offer Just for You! Save Big on Your Next Campacola Purchase! 🛒**  \r\n\r\nDear [Customer's Name],  \r\n\r\nWe’re thrilled to share something special with **you**! 🎉 For a limited time, enjoy an extra **15% OFF** on your next order of **Campacola products**—because you deserve the best at the best price!  \r\n\r\n🔥 **Why You’ll Love This Deal:**  \r\n✅ **High-quality products** – Campacola brings you premium items designed to make your life easier and more enjoyable.  \r\n✅ **Exclusive discount** – This offer is only for our valued customers like you!  \r\n✅ **Hassle-free shopping** – Order with confidence and get your products delivered straight to your doorstep.  \r\n\r\n⏳ **Hurry!** This offer is valid only for a short time. Don’t miss out on saving **15%** and experiencing the Campacola difference!  \r\n\r\n💬 **How to Avail:**  \r\n1️⃣ Click on our link below to explore the latest collection.  \r\n2️⃣ Place your order and apply the discount code **CAMPA15** at checkout.  \r\n3️⃣ Sit back and enjoy your shopping experience!  \r\n\r\n📅 **Offer ends soon!** Don’t wait—click here now: [Insert Link]  \r\n\r\nHappy shopping! 🛍️  \r\nTeam Campacola India  \r\n\r\n*P.S. Follow us on [Social Media Handles] for more exciting offers and updates!*",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758705049031_92f53a0a",
+    "status": "completed",
+    "id": "campaign_1758705049032_0wzs85wiy",
+    "createdAt": "2025-09-24T09:10:49.032Z",
+    "completedAt": "2025-09-24T09:10:53.383Z",
+    "reportId": "report_1758705053382_ks4dla2x7"
+  },
+  {
+    "name": "test",
+    "sessionId": "session_1758704978048",
+    "message": "**🚀 Exclusive Offer Just for You! Save Big on Your Next Campacola Purchase! 🛒**  \r\n\r\nDear [Customer's Name],  \r\n\r\nWe’re thrilled to share something special with **you**! 🎉 For a limited time, enjoy an extra **15% OFF** on your next order of **Campacola products**—because you deserve the best at the best price!  \r\n\r\n🔥 **Why You’ll Love This Deal:**  \r\n✅ **High-quality products** – Campacola brings you premium items designed to make your life easier and more enjoyable.  \r\n✅ **Exclusive discount** – This offer is only for our valued customers like you!  \r\n✅ **Hassle-free shopping** – Order with confidence and get your products delivered straight to your doorstep.  \r\n\r\n⏳ **Hurry!** This offer is valid only for a short time. Don’t miss out on saving **15%** and experiencing the Campacola difference!  \r\n\r\n💬 **How to Avail:**  \r\n1️⃣ Click on our link below to explore the latest collection.  \r\n2️⃣ Place your order and apply the discount code **CAMPA15** at checkout.  \r\n3️⃣ Sit back and enjoy your shopping experience!  \r\n\r\n📅 **Offer ends soon!** Don’t wait—click here now: [Insert Link]  \r\n\r\nHappy shopping! 🛍️  \r\nTeam Campacola India  \r\n\r\n*P.S. Follow us on [Social Media Handles] for more exciting offers and updates!*",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758705083456_e143e7ac",
+    "status": "scheduled",
+    "scheduledTime": "2025-09-24T17:47",
+    "id": "campaign_1758705083457_q9zj36e8f",
+    "createdAt": "2025-09-24T09:11:23.457Z",
+    "scheduleInfo": {
+      "campaignId": "job_1758705083456_e143e7ac",
+      "scheduledTime": "2025-09-24T17:47",
+      "cronExpression": "47 17 24 9 *"
+    }
+  },
+  {
+    "name": "osmium",
+    "sessionId": "session_1758704978048",
+    "message": "test",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758705188552_a8ab4fca",
+    "status": "completed",
+    "scheduledTime": "2025-09-24T14:44",
+    "id": "campaign_1758705188553_pij35wf13",
+    "createdAt": "2025-09-24T09:13:08.553Z",
+    "scheduleInfo": {
+      "campaignId": "job_1758705188552_a8ab4fca",
+      "scheduledTime": "2025-09-24T14:44",
+      "cronExpression": "44 14 24 9 *"
+    },
+    "completedAt": "2025-09-24T09:14:00.625Z",
+    "reportId": "report_1758705240624_hznk65ap3"
+  },
+  {
+    "name": "test",
+    "sessionId": "session_1758704978048",
+    "message": "hh",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [
+      {
+        "name": "OSMIUM.pdf",
+        "type": "document",
+        "size": 5968388
+      }
+    ],
+    "buttons": null,
+    "jobId": "job_1758705218813_f238ad46",
+    "status": "completed",
+    "id": "campaign_1758705218814_wfpf1uacn",
+    "createdAt": "2025-09-24T09:13:38.814Z",
+    "completedAt": "2025-09-24T09:13:44.727Z",
+    "reportId": "report_1758705224727_b9ypeii6v"
+  },
+  {
+    "name": "test",
+    "sessionId": "session_1758705368621",
+    "message": "tresdft",
+    "recipients": [
+      "+918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758705421651_4a031fea",
+    "status": "completed",
+    "id": "campaign_1758705421651_eogh3z7w3",
+    "createdAt": "2025-09-24T09:17:01.651Z",
+    "completedAt": "2025-09-24T09:17:01.653Z",
+    "reportId": "report_1758705421653_hy6z82rql"
+  },
+  {
+    "name": "test",
+    "sessionId": "session_1758705368621",
+    "message": "tresdft",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758705456441_d3a7a7fc",
+    "status": "completed",
+    "scheduledTime": "2025-09-24T14:49",
+    "id": "campaign_1758705456442_b0h4t5x0s",
+    "createdAt": "2025-09-24T09:17:36.442Z",
+    "scheduleInfo": {
+      "campaignId": "job_1758705456441_d3a7a7fc",
+      "scheduledTime": "2025-09-24T14:49",
+      "cronExpression": "49 14 24 9 *"
+    },
+    "completedAt": "2025-09-24T09:19:00.536Z",
+    "reportId": "report_1758705540536_ytaqc3zqs"
+  },
+  {
+    "name": "Untitled Campaign",
+    "sessionId": "session_1758705620106",
+    "message": "nn",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758705660852_c7d35a89",
+    "status": "completed",
+    "id": "campaign_1758705660853_aw8fmbyti",
+    "createdAt": "2025-09-24T09:21:00.853Z",
+    "completedAt": "2025-09-24T09:21:05.437Z",
+    "reportId": "report_1758705665437_y6bksocv7"
+  },
+  {
+    "name": "cola",
+    "sessionId": "session_1758705620106",
+    "message": "nn2",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758705689427_9a7471b5",
+    "status": "completed",
+    "scheduledTime": "2025-09-24T14:53",
+    "id": "campaign_1758705689428_3qrmgm1cn",
+    "createdAt": "2025-09-24T09:21:29.428Z",
+    "scheduleInfo": {
+      "campaignId": "job_1758705689427_9a7471b5",
+      "scheduledTime": "2025-09-24T14:53",
+      "cronExpression": "53 14 24 9 *"
+    },
+    "completedAt": "2025-09-24T09:23:05.104Z",
+    "reportId": "report_1758705785103_oewsc3zkz"
+  },
+  {
+    "name": "test",
+    "sessionId": "session_1758705620106",
+    "message": "hii",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758711732186_25d5193e",
+    "status": "completed",
+    "id": "campaign_1758711732190_rzktyzusb",
+    "createdAt": "2025-09-24T11:02:12.190Z",
+    "completedAt": "2025-09-24T11:02:16.386Z",
+    "reportId": "report_1758711736386_win1p9bql"
+  },
+  {
+    "name": "test",
+    "sessionId": "session_1758719241891",
+    "message": "**🚀 Exclusive Offer Just for You!**  \r\n\r\n**🎉 Get Up to 50% OFF on Your First Order with LOLA India!**  \r\n\r\nWe’re thrilled to welcome you to **LOLA India** – your one-stop destination for **premium, high-quality products** designed to make your life easier and more enjoyable! Whether you’re looking for **home essentials, fashion, or wellness products**, we’ve got something special for you.  \r\n\r\n**Why You’ll Love LOLA India:**  \r\n✅ **Trending Products**: Stay ahead with the latest styles and innovations.  \r\n✅ **Affordable Prices**: Enjoy unbeatable discounts on your first order!  \r\n✅ **Fast & Free Delivery**: Get your products delivered straight to your doorstep, hassle-free.  \r\n✅ **Customer-First Approach**: We prioritize your satisfaction and offer 24/7 support.  \r\n\r\n**🎁 Special Launch Offer:**  \r\nUse code **WELCOME50** at checkout and **get up to 50% OFF** on your first purchase! But hurry – this offer is valid only for a limited time.  \r\n\r\nDon’t miss out on this amazing deal! **Shop now** and discover the LOLA India difference.  \r\n\r\n👉 **Click [HERE] to explore our collection or reply to this message to place your order today!**  \r\n\r\n*Offer valid for a limited period. Terms and conditions apply.*",
+    "recipients": [
+      "+918209199581"
+    ],
+    "mediaFiles": [
+      {
+        "name": "kuldeep.jpg",
+        "type": "image",
+        "size": 184782
+      }
+    ],
+    "buttons": null,
+    "jobId": "job_1758719381706_ce3144cf",
+    "status": "completed",
+    "id": "campaign_1758719381706_bnrpr435h",
+    "createdAt": "2025-09-24T13:09:41.706Z",
+    "completedAt": "2025-09-24T13:09:45.449Z",
+    "reportId": "report_1758719385448_it5nizw1z"
+  },
+  {
+    "name": "Untitled Campaign",
+    "sessionId": "session_1758719241891",
+    "message": "**🚀 Exclusive Offer Just for You!**  \r\n\r\n**🎉 Get Up to 50% OFF on Your First Order with LOLA India!**  \r\n\r\nWe’re thrilled to welcome you to **LOLA India** – your one-stop destination for **premium, high-quality products** designed to make your life easier and more enjoyable! Whether you’re looking for **home essentials, fashion, or wellness products**, we’ve got something special for you.  \r\n\r\n**Why You’ll Love LOLA India:**  \r\n✅ **Trending Products**: Stay ahead with the latest styles and innovations.  \r\n✅ **Affordable Prices**: Enjoy unbeatable discounts on your first order!  \r\n✅ **Fast & Free Delivery**: Get your products delivered straight to your doorstep, hassle-free.  \r\n✅ **Customer-First Approach**: We prioritize your satisfaction and offer 24/7 support.  \r\n\r\n**🎁 Special Launch Offer:**  \r\nUse code **WELCOME50** at checkout and **get up to 50% OFF** on your first purchase! But hurry – this offer is valid only for a limited time.  \r\n\r\nDon’t miss out on this amazing deal! **Shop now** and discover the LOLA India difference.  \r\n\r\n👉 **Click [HERE] to explore our collection or reply to this message to place your order today!**  \r\n\r\n*Offer valid for a limited period. Terms and conditions apply.*",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [
+      {
+        "name": "kuldeep.jpg",
+        "type": "image",
+        "size": 184782
+      }
+    ],
+    "buttons": null,
+    "jobId": "job_1758719423279_c5fb899c",
+    "status": "completed",
+    "id": "campaign_1758719423280_wc5tqib4a",
+    "createdAt": "2025-09-24T13:10:23.280Z",
+    "completedAt": "2025-09-24T13:10:50.414Z",
+    "reportId": "report_1758719450414_fhydgl63g"
+  },
+  {
+    "name": "Untitled Campaign",
+    "sessionId": "session_1758719241891",
+    "message": "test",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758792121215_449937fc",
+    "status": "completed",
+    "id": "campaign_1758792121219_q7hmd93zy",
+    "createdAt": "2025-09-25T09:22:01.219Z",
+    "completedAt": "2025-09-25T09:22:04.926Z",
+    "reportId": "report_1758792124925_gt5ihhpqm"
+  },
+  {
+    "name": "Untitled Campaign",
+    "sessionId": "session_1758792185909",
+    "message": "yghh",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758792248885_bc73624f",
+    "status": "completed",
+    "id": "campaign_1758792248885_o3h87w2qh",
+    "createdAt": "2025-09-25T09:24:08.885Z",
+    "completedAt": "2025-09-25T09:24:14.968Z",
+    "reportId": "report_1758792254967_k4m29znhq"
+  },
+  {
+    "name": "Untitled Campaign",
+    "sessionId": "session_1758792185909",
+    "message": "yghhm",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1758792285980_7c5d1ad1",
+    "status": "completed",
+    "scheduledTime": "2025-09-25T14:56",
+    "id": "campaign_1758792285981_or11bnv9k",
+    "createdAt": "2025-09-25T09:24:45.981Z",
+    "scheduleInfo": {
+      "campaignId": "job_1758792285980_7c5d1ad1",
+      "scheduledTime": "2025-09-25T14:56",
+      "cronExpression": "56 14 25 9 *"
+    },
+    "completedAt": "2025-09-25T09:26:07.313Z",
+    "reportId": "report_1758792367313_v7kdpqgga"
+  },
+  {
+    "name": "test",
+    "sessionId": "session_1759048016365",
+    "message": "**🚀 Unlock the Future of Learning with *Osmium* – AI-Powered EdTech for Smarter Results!**  \r\n\r\nAre you tired of traditional learning methods that *don’t* work for you? 📚✨ *Osmium* is here to revolutionize how you learn, teach, and succeed! Our **AI-powered platform** adapts to *your* needs, offering personalized learning paths, real-time feedback, and world-class content – all in one place.  \r\n\r\nWhether you're a **student** looking to ace exams, a **professional** upskilling for a better career, or an **educator** seeking innovative tools to engage learners, *Osmium* has got you covered. 🎯  \r\n\r\n✅ **Personalized Learning**: AI tailors content to *your* pace and style.  \r\n✅ **Instant Feedback**: Get real-time insights to improve faster.  \r\n✅ **Interactive Content**: From quizzes to simulations, learning is now fun and engaging.  \r\n✅ **Affordable & Accessible**: High-quality education at your fingertips, anytime, anywhere.  \r\n\r\n💡 *Why wait?* The future of education is here, and it’s *smart, fast, and tailored just for you*. Join thousands of learners and educators who’ve already transformed their results with *Osmium*.  \r\n\r\n🔥 **Limited-Time Offer**: Sign up now and get **20% off** on your first month! Don’t miss out on this chance to learn smarter, not harder.  \r\n\r\n👉 **Click here to get started**: [Insert Link]  \r\n\r\n*Osmium – Where AI Meets Education!* 🚀",
+    "recipients": [
+      "918209199581"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1759048101887_30af2072",
+    "status": "completed",
+    "id": "campaign_1759048101887_v5raqe31k",
+    "createdAt": "2025-09-28T08:28:21.887Z",
+    "completedAt": "2025-09-28T08:28:29.658Z",
+    "reportId": "report_1759048109657_ao0jm3zc0"
+  },
+  {
+    "name": "test",
+    "sessionId": "session_1759048016365",
+    "message": "test",
+    "recipients": [
+      "+918209199581",
+      "+919414107674"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1759048174552_3d0226a7",
+    "status": "completed",
+    "id": "campaign_1759048174552_ujw8u9ps0",
+    "createdAt": "2025-09-28T08:29:34.552Z",
+    "completedAt": "2025-09-28T08:29:46.792Z",
+    "reportId": "report_1759048186791_rs1jqqzhd"
+  },
+  {
+    "name": "Untitled Campaign",
+    "sessionId": "session_1759048016365",
+    "message": "jnjk",
+    "recipients": [
+      "918209199581",
+      "919414107674"
+    ],
+    "mediaFiles": [],
+    "buttons": null,
+    "jobId": "job_1759048248369_2c95dada",
+    "status": "completed",
+    "id": "campaign_1759048248370_vpqqqimad",
+    "createdAt": "2025-09-28T08:30:48.370Z",
+    "completedAt": "2025-09-28T08:31:02.498Z",
+    "reportId": "report_1759048262497_1x8v7j04d"
+  }
+]
